@@ -346,7 +346,7 @@ class Game:
             return False
 
         unit = self.get(coords.src)
-        if unit is None and unit.player != self.next_player:
+        if unit is None or unit.player != self.next_player:
             return False
         unit = self.get(coords.dst)
 
