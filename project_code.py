@@ -312,23 +312,55 @@ class Game:
 
     def is_valid_move(self, coords : CoordPair) -> bool:
         """Validate a move expressed as a CoordPair. TODO: WRITE MISSING CODE!!!"""
+
+        # AI, F and P CANNOT move while in combat
+        # Tech and Virus CAN move while in combat
+        #
+
         if not self.is_valid_coord(coords.src) or not self.is_valid_coord(coords.dst):
             print("Coordinates not within board dimensions")
             return False
         
+        # get all adjacent cells to current player
         cellADJ = coords.src.iter_adjacent()
         listADJ = [next(cellADJ), next(cellADJ), next(cellADJ), next(cellADJ)]
-
-        if coords.dst not in listADJ:
-            return False
-
-        unit = self.get(coords.src)
+        
+        unitSRC = self.get(coords.src)
+        unitDST = self.get(coords.dst)
+        
         # if no unit is at current position or if unit at current position belongs to the opponent
-        if unit is None or unit.player != self.next_player:
+        if unitSRC is None or unitSRC.player != self.next_player:
             return False
-        unit = self.get(coords.dst)
 
-        return (unit is None)
+        # Attacker AI, F and P CAN move UP or LEFT
+        # Defender AI, F and P CAN move BOTTOM or RIGHT
+        # Tech and Virus CAN move in ALL directions
+        if unitSRC.type == UnitType.AI or unitSRC.type == UnitType.Firewall or unitSRC.type == UnitType.Program:
+            if unitSRC.player == Player.Attacker:
+            # legal moves for AI, Firewall and Program
+                attackerMove = [listADJ[0], listADJ[1]] 
+                if coords.dst not in attackerMove:
+                    return False
+            else:
+                # legal moves for AI, Firewall and Program
+                defenderMove = [listADJ[2], listADJ[3]]
+                if coords.dst not in defenderMove:
+                    return False
+        else:
+            if coords.dst not in listADJ:
+                return False
+        
+        """
+        if unitSRC == unitDST:
+            return True
+        elif unitSRC.player == unitDST:
+            return False
+        else:
+            return (unitDST is None)
+        """
+
+        return (unitDST is None)
+        
 
     def perform_move(self, coords : CoordPair) -> Tuple[bool,str]:
         """Validate and perform a move expressed as a CoordPair. TODO: WRITE MISSING CODE!!!"""
