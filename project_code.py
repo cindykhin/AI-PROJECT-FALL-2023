@@ -316,36 +316,14 @@ class Game:
             print("Coordinates not within board dimensions")
             return False
         
-        cellSRC = str(coords.src)
-        cellDST = str(coords.dst)
+        cellADJ = coords.src.iter_adjacent()
+        listADJ = [next(cellADJ), next(cellADJ), next(cellADJ), next(cellADJ)]
 
-        # if src and dst are in the same row, move can be done one to the left or one to the right
-        if cellSRC[0] == cellDST[0]:
-            colSRC = int(cellSRC[1])
-            colDST = int(cellDST[1])
-
-            colLeft = colSRC - 1 # one cell to the left
-            colRight = colSRC + 1 # one cell to the right
-
-            if (colLeft == colDST or colRight == colDST) == False:
-                return False
-                
-        # if src and dst are in the same column, move can be done one above or one below
-        if cellSRC[1] == cellDST[1]:
-            rowSRC = cellSRC[0]
-            rowDST = cellDST[0]
-
-            rowUP = chr(ord(rowSRC) - 1) # one cell above
-            rowDOWN = chr(ord(rowSRC) + 1) # one cell below
-
-            if (rowUP == rowDST or rowDOWN == rowDST) == False:
-                return False
-
-        # if src and dst are not adjacent, move is not valid
-        if cellSRC[0] != cellDST[0] and cellSRC[1] != cellDST[1]:
+        if coords.dst not in listADJ:
             return False
 
         unit = self.get(coords.src)
+        # if no unit is at current position or if unit at current position belongs to the opponent
         if unit is None or unit.player != self.next_player:
             return False
         unit = self.get(coords.dst)
