@@ -312,30 +312,102 @@ class Game:
 
     def is_valid_move(self, coords : CoordPair) -> bool:
         """Validate a move expressed as a CoordPair. TODO: WRITE MISSING CODE!!!"""
+
         if not self.is_valid_coord(coords.src) or not self.is_valid_coord(coords.dst):
             print("Coordinates not within board dimensions")
             return False
         
+        unitSRC = self.get(coords.src)
+        unitDST = self.get(coords.dst)
+        
+        # if no unit is at current position or if unit at current position belongs to the opponent
+        if unitSRC is None or unitSRC.player != self.next_player:
+            return False
+
+        # get all adjacent cells to current player
         cellADJ = coords.src.iter_adjacent()
         listADJ = [next(cellADJ), next(cellADJ), next(cellADJ), next(cellADJ)]
 
-        if coords.dst not in listADJ:
-            return False
+        # if unit self-destructs
+        if coords.src == coords.dst:
+            return True
 
-        unit = self.get(coords.src)
-        # if no unit is at current position or if unit at current position belongs to the opponent
-        if unit is None or unit.player != self.next_player:
-            return False
-        unit = self.get(coords.dst)
+        # if adjacent cell is occupied by opponent, unit is in combat mode and CANNOT move
+        # if adjacent cell is occupied by opponent, unit CAN attack opponent
+        for cell in listADJ:
+            if self.get(cell) is not None and self.get(cell).player != unitSRC.player:
+                # unit can attack opponent if dst is occupied by opponent
+                if cell == coords.dst:
+                    return True
+                # unit cannot move
+                else:
+                    return False
 
-        return (unit is None)
+        # AI, Firewall and Program will NOT move if engaged in combat
+        if unitSRC.type == UnitType.AI or unitSRC.type == UnitType.Firewall or unitSRC.type == UnitType.Program:
+            # Attacker AI, F and P CAN move UP or LEFT
+            if unitSRC.player == Player.Attacker:
+            # legal moves for AI, Firewall and Program
+                attackerMove = [listADJ[0], listADJ[1]] 
+                if coords.dst not in attackerMove:
+                    return False
+            # Defender AI, F and P CAN move BOTTOM or RIGHT
+            else:
+                # legal moves for AI, Firewall and Program
+                defenderMove = [listADJ[2], listADJ[3]]
+                if coords.dst not in defenderMove:
+                    return False
+        # Tech and Virus CAN move in ALL directions at ALL times
+        else:
+            if coords.dst not in listADJ:
+                return False
+
+        # AI can repair Virus or Tech
+        # Tech can repair AI, Firewall or Program
+        if unitDST is not None:
+            if unitSRC.player == unitDST.player and unitSRC.type == UnitType.AI:
+                if unitDST.type == UnitType.Virus or unitDST.type == UnitType.Tech:
+                    return True
+                else:
+                    return False
+            if unitSRC.player == unitDST.player and unitSRC.type == UnitType.Tech:
+                if unitDST.type == UnitType.AI or unitDST.type == UnitType.Firewall or unitDST.type == UnitType.Program:
+                    return True
+                else:
+                    return False
+        else:
+            return True
+        
 
     def perform_move(self, coords : CoordPair) -> Tuple[bool,str]:
         """Validate and perform a move expressed as a CoordPair. TODO: WRITE MISSING CODE!!!"""
         if self.is_valid_move(coords):
-            self.set(coords.dst,self.get(coords.src))
-            self.set(coords.src,None)
-            return (True,"")
+            # if cell is free
+            if self.get(coords.dst) is None:
+                self.set(coords.dst,self.get(coords.src))
+                self.set(coords.src,None)
+                return (True,"move from " + str(coords.src) + " to " + str(coords.dst))
+            elif coords.src == coords.dst:
+
+                # INSERT CODE FOR SELF-DESTRUCT
+
+                return (True,"self-destruct at " + str(coords.src))
+            elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.AI:
+
+                # INSERT CODE FOR REPAIR
+
+                return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
+            elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.Tech:
+
+                # INSERT CODE FOR REPAIR
+
+                return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
+            else:
+
+                # INSERT CODE FOR ATTACK HERE
+
+                return (True,"attack from " + str(coords.src) + " to " + str(coords.dst))
+
         return (False,"invalid move")
 
     def next_turn(self):
