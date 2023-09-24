@@ -70,7 +70,7 @@ class Unit:
 
     def mod_health(self, health_delta : int):
         """Modify this unit's health by delta amount."""
-        self.health += health_delta
+        self.health -= health_delta
         if self.health < 0:
             self.health = 0
         elif self.health > 9:
@@ -381,6 +381,10 @@ class Game:
 
     def perform_move(self, coords : CoordPair) -> Tuple[bool,str]:
         """Validate and perform a move expressed as a CoordPair. TODO: WRITE MISSING CODE!!!"""
+        unitSRC = self.get(coords.src)
+        unitDST = self.get(coords.dst)
+       
+        
         if self.is_valid_move(coords):
             # if cell is free
             if self.get(coords.dst) is None:
@@ -390,7 +394,7 @@ class Game:
             elif coords.src == coords.dst:
 
                 # INSERT CODE FOR SELF-DESTRUCT
-
+                
                 return (True,"self-destruct at " + str(coords.src))
             elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.AI:
 
@@ -405,7 +409,9 @@ class Game:
             else:
 
                 # INSERT CODE FOR ATTACK HERE
-
+                unitDST.mod_health(unitDST.damage_amount(unitDST))
+                unitSRC.mod_health(unitSRC.damage_amount(unitSRC))
+                
                 return (True,"attack from " + str(coords.src) + " to " + str(coords.dst))
 
         return (False,"invalid move")
