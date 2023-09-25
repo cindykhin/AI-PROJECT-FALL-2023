@@ -397,14 +397,7 @@ class Game:
             elif coords.src == coords.dst:
 
                 # INSERT CODE FOR SELF-DESTRUCT
-               
-                # if adjacent cell is occupied by opponent, unit is in combat mode and CANNOT move
-                # if adjacent cell is occupied by opponent, unit CAN attack opponent
-                for cell in listADJ:
-                    if self.get(cell) is not None and self.get(cell).player != unitSRC.player:
-                        self.get(cell).health -= 2           
-                unitSRC.health = 0
-
+                        
                 return (True,"self-destruct at " + str(coords.src))
             elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.AI:
 
@@ -419,8 +412,8 @@ class Game:
             else:
 
                 # INSERT CODE FOR ATTACK HERE
-                self.mod_health(coords.src, -unitDST.damage_amount(unitDST))
-                self.mod_health(coords.dst, -unitSRC.damage_amount(unitSRC))
+                self.mod_health(coords.src, -unitDST.damage_amount(unitSRC))
+                self.mod_health(coords.dst, -unitSRC.damage_amount(unitDST))
                 
                 return (True,"attack from " + str(coords.src) + " to " + str(coords.dst))
 
