@@ -70,7 +70,7 @@ class Unit:
 
     def mod_health(self, health_delta : int):
         """Modify this unit's health by delta amount."""
-        self.health -= health_delta
+        self.health += health_delta
         if self.health < 0:
             self.health = 0
         elif self.health > 9:
@@ -383,6 +383,9 @@ class Game:
         """Validate and perform a move expressed as a CoordPair. TODO: WRITE MISSING CODE!!!"""
         unitSRC = self.get(coords.src)
         unitDST = self.get(coords.dst)
+
+        cellADJ = coords.src.iter_adjacent()
+        listADJ = [next(cellADJ), next(cellADJ), next(cellADJ), next(cellADJ)]
        
         
         if self.is_valid_move(coords):
@@ -394,7 +397,14 @@ class Game:
             elif coords.src == coords.dst:
 
                 # INSERT CODE FOR SELF-DESTRUCT
-                
+               
+                # if adjacent cell is occupied by opponent, unit is in combat mode and CANNOT move
+                # if adjacent cell is occupied by opponent, unit CAN attack opponent
+                for cell in listADJ:
+                    if self.get(cell) is not None and self.get(cell).player != unitSRC.player:
+                        self.get(cell).health -= 2           
+                unitSRC.health = 0
+
                 return (True,"self-destruct at " + str(coords.src))
             elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.AI:
 
@@ -409,8 +419,8 @@ class Game:
             else:
 
                 # INSERT CODE FOR ATTACK HERE
-                unitDST.mod_health(unitDST.damage_amount(unitDST))
-                unitSRC.mod_health(unitSRC.damage_amount(unitSRC))
+                self.mod_health(coords.src, -unitDST.damage_amount(unitDST))
+                self.mod_health(coords.dst, -unitSRC.damage_amount(unitSRC))
                 
                 return (True,"attack from " + str(coords.src) + " to " + str(coords.dst))
 
