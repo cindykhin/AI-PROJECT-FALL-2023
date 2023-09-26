@@ -397,7 +397,6 @@ class Game:
             elif coords.src == coords.dst:
 
                 # INSERT CODE FOR SELF-DESTRUCT
-                        
                 return (True,"self-destruct at " + str(coords.src))
             elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.AI:
 
@@ -412,8 +411,8 @@ class Game:
             else:
 
                 # INSERT CODE FOR ATTACK HERE
-                self.mod_health(coords.src, -unitDST.damage_amount(unitSRC))
-                self.mod_health(coords.dst, -unitSRC.damage_amount(unitDST))
+                self.mod_health(coords.src, -unitDST.damage_amount(unitDST))
+                self.mod_health(coords.dst, -unitSRC.damage_amount(unitSRC))
                 
                 return (True,"attack from " + str(coords.src) + " to " + str(coords.dst))
 
