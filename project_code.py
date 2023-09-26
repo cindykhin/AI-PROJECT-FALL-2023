@@ -411,8 +411,8 @@ class Game:
             else:
 
                 # INSERT CODE FOR ATTACK HERE
-                self.mod_health(coords.src, -unitDST.damage_amount(unitDST))
-                self.mod_health(coords.dst, -unitSRC.damage_amount(unitSRC))
+                self.mod_health(coords.src, -unitSCR.damage_amount(unitDST))
+                self.mod_health(coords.dst, -unitDST.damage_amount(unitSRC))
                 
                 return (True,"attack from " + str(coords.src) + " to " + str(coords.dst))
 
