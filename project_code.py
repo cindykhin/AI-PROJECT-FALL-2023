@@ -332,17 +332,20 @@ class Game:
         if coords.src == coords.dst:
             return True
 
-        # if adjacent cell is occupied by opponent, unit is in combat mode and CANNOT move
         # if adjacent cell is occupied by opponent, unit CAN attack opponent
+        if coords.dst in listADJ:
+            if self.get(coords.dst) is not None and self.get(coords.dst).player != unitSRC.player:
+                return True
+        
+        # if adjacent cell is occupied by opponent and is not attacked, 
+        # already verified if unit attacked opponent 
+        # therefore looking for first instance of a cell occupied by opponent that is not the target of unit
         for cell in listADJ:
             if self.get(cell) is not None and self.get(cell).player != unitSRC.player:
-                # unit can attack opponent if dst is occupied by opponent
-                if cell == coords.dst:
-                    return True
-                # unit cannot move
-                else:
+                # unit is in combat mode and CANNOT move
+                if cell != coords.dst:
                     return False
-
+                
         # AI, Firewall and Program will NOT move if engaged in combat
         if unitSRC.type == UnitType.AI or unitSRC.type == UnitType.Firewall or unitSRC.type == UnitType.Program:
             # Attacker AI, F and P CAN move UP or LEFT
@@ -385,6 +388,7 @@ class Game:
 
         cellADJ = coords.src.iter_adjacent()
         listADJ = [next(cellADJ), next(cellADJ), next(cellADJ), next(cellADJ)]
+
         if self.is_valid_move(coords):
             # if cell is free
             if self.get(coords.dst) is None:
