@@ -380,8 +380,7 @@ class Game:
                     return False
         else:
             return True
-        
-
+         
     def perform_move(self, coords : CoordPair) -> Tuple[bool,str]:
         """Validate and perform a move expressed as a CoordPair. TODO: WRITE MISSING CODE!!!"""
         unitSRC = self.get(coords.src)
@@ -389,7 +388,7 @@ class Game:
 
         cellADJ = coords.src.iter_adjacent()
         listADJ = [next(cellADJ), next(cellADJ), next(cellADJ), next(cellADJ)]
-       
+
         if self.is_valid_move(coords):
             # if cell is free
             if self.get(coords.dst) is None:
@@ -413,10 +412,9 @@ class Game:
                 for cell in listADJ:
                     if self.get(cell) is not None:
                         self.mod_health(cell, -2)
-                
                 self.mod_health(coords.src, -9)
-
                 return (True,"self-destruct at " + str(coords.src))
+                
             elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.AI:
 
                 # INSERT CODE FOR REPAIR
