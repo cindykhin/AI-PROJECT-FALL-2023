@@ -22,6 +22,9 @@ class UnitType(Enum):
     Program = 3
     Firewall = 4
 
+
+
+
 class Player(Enum):
     """The 2 players."""
     Attacker = 0
@@ -57,11 +60,11 @@ class Unit:
     ]
     # class variable: repair table for units (based on the unit type constants in order)
     repair_table : ClassVar[list[list[int]]] = [
-        [0,1,1,0,0], # AI
-        [3,0,0,3,3], # Tech
-        [0,0,0,0,0], # Virus
-        [0,0,0,0,0], # Program
-        [0,0,0,0,0], # Firewall
+        [1,1,1,1,1], # AI
+        [3,1,1,3,3], # Tech
+        [1,1,1,1,1], # Virus
+        [1,1,1,1,1], # Program
+        [1,1,1,1,1], # Firewall
     ]
 
     def is_alive(self) -> bool:
@@ -88,16 +91,21 @@ class Unit:
     
     def damage_amount(self, target: Unit) -> int:
         """How much can this unit damage another unit."""
+        #self.damage_table[[]]
         amount = self.damage_table[self.type.value][target.type.value]
         if target.health - amount < 0:
             return target.health
         return amount
+
+
+
 
     def repair_amount(self, target: Unit) -> int:
         """How much can this unit repair another unit."""
         amount = self.repair_table[self.type.value][target.type.value]
         if target.health + amount > 9:
             return 9 - target.health
+        
         return amount
 
 ##############################################################################################################
@@ -380,7 +388,8 @@ class Game:
                     return False
         else:
             return True
-         
+        
+
     def perform_move(self, coords : CoordPair) -> Tuple[bool,str]:
         """Validate and perform a move expressed as a CoordPair. TODO: WRITE MISSING CODE!!!"""
         unitSRC = self.get(coords.src)
@@ -388,7 +397,7 @@ class Game:
 
         cellADJ = coords.src.iter_adjacent()
         listADJ = [next(cellADJ), next(cellADJ), next(cellADJ), next(cellADJ)]
-
+       
         if self.is_valid_move(coords):
             # if cell is free
             if self.get(coords.dst) is None:
@@ -398,35 +407,30 @@ class Game:
             elif coords.src == coords.dst:
 
                 # INSERT CODE FOR SELF-DESTRUCT
-
-                cellCorner = listADJ[0].iter_adjacent()
-                listTopCorner = [next(cellCorner), next(cellCorner), next(cellCorner), next(cellCorner)]
-                cellCorner = listADJ[2].iter_adjacent()
-                listBottomCorner = [next(cellCorner), next(cellCorner), next(cellCorner), next(cellCorner)]
-
-                listADJ.append(listTopCorner[1])
-                listADJ.append(listTopCorner[3])
-                listADJ.append(listBottomCorner[1])
-                listADJ.append(listBottomCorner[3])
-
-                for cell in listADJ:
-                    if self.get(cell) is not None:
-                        self.mod_health(cell, -2)
-                self.mod_health(coords.src, -9)
                 return (True,"self-destruct at " + str(coords.src))
-                
+
+
+
             elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.AI:
+                    if self.get(coords.dst).type == UnitType.Tech or self.get(coords.dst).type == UnitType.Virus:
+                        self.mod_health(coords.dst, unitSRC.repair_amount(unitDST))
+                        print("unitSRC.repair_amount(unitDST)")
+                        return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
+                        #repair here
+                    return (False,"invalid move")
+        
 
                 # INSERT CODE FOR REPAIR
 
-                return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
+               # return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
             elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.Tech:
 
                 # INSERT CODE FOR REPAIR
 
-                return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
+                return (True,"repairTECH from " + str(coords.src) + " to " + str(coords.dst))
             else:
 
+#BASHAR CHECK THIS
                 # INSERT CODE FOR ATTACK HERE
                 self.mod_health(coords.src, -unitSRC.damage_amount(unitDST))
                 self.mod_health(coords.dst, -unitDST.damage_amount(unitSRC))
