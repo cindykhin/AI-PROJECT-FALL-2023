@@ -405,13 +405,27 @@ class Game:
                 self.set(coords.src,None)
                 return (True,"move from " + str(coords.src) + " to " + str(coords.dst))
             elif coords.src == coords.dst:
+                cellCorner = listADJ[0].iter_adjacent()
+                listTopCorner = [next(cellCorner), next(cellCorner), next(cellCorner), next(cellCorner)]
+                cellCorner = listADJ[2].iter_adjacent()
+                listBottomCorner = [next(cellCorner), next(cellCorner), next(cellCorner), next(cellCorner)]
+
+                listADJ.append(listTopCorner[1])
+                listADJ.append(listTopCorner[3])
+                listADJ.append(listBottomCorner[1])
+                listADJ.append(listBottomCorner[3])
+
+                for cell in listADJ:
+                    if self.get(cell) is not None:
+                        self.mod_health(cell, -2)
+                self.mod_health(coords.src, -9)
 
                 # INSERT CODE FOR SELF-DESTRUCT
                 return (True,"self-destruct at " + str(coords.src))
 
 
 
-            elif self.get(coords.src).player == self.get(coords.dst).player: #and self.get(coords.src).type == UnitType.AI:
+            elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.AI:
                     #if self.get(coords.dst).type == UnitType.Tech or self.get(coords.dst).type == UnitType.Virus:
                 self.mod_health(coords.dst, unitSRC.repair_amount(unitDST))
                         #print("unitSRC.repair_amount(unitDST)")
@@ -424,6 +438,7 @@ class Game:
 
                # return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
             elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.Tech:
+                self.mod_health(coords.dst, unitSRC.repair_amount(unitDST))
 
                 # INSERT CODE FOR REPAIR
 
