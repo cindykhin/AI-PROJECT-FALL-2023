@@ -22,9 +22,6 @@ class UnitType(Enum):
     Program = 3
     Firewall = 4
 
-
-
-
 class Player(Enum):
     """The 2 players."""
     Attacker = 0
@@ -97,15 +94,11 @@ class Unit:
             return target.health
         return amount
 
-
-
-
     def repair_amount(self, target: Unit) -> int:
         """How much can this unit repair another unit."""
         amount = self.repair_table[self.type.value][target.type.value]
         if target.health + amount > 9:
-            return 9 - target.health
-        
+            return 9 - target.health  
         return amount
 
 ##############################################################################################################
@@ -375,6 +368,7 @@ class Game:
 
         # AI can repair Virus or Tech
         # Tech can repair AI, Firewall or Program
+        # Repair will fail if unit's health is at maximum (already at 9)
         if unitDST is not None:
             if unitSRC.player == unitDST.player and unitSRC.type == UnitType.AI:
                 if (unitDST.type == UnitType.Virus or unitDST.type == UnitType.Tech) and unitDST.health != 9:
@@ -388,7 +382,6 @@ class Game:
                     return False
         else:
             return True
-        
 
     def perform_move(self, coords : CoordPair) -> Tuple[bool,str]:
         """Validate and perform a move expressed as a CoordPair. TODO: WRITE MISSING CODE!!!"""
@@ -399,12 +392,17 @@ class Game:
         listADJ = [next(cellADJ), next(cellADJ), next(cellADJ), next(cellADJ)]
        
         if self.is_valid_move(coords):
-            # if cell is free
+            # if cell is free, perform move
             if self.get(coords.dst) is None:
                 self.set(coords.dst,self.get(coords.src))
                 self.set(coords.src,None)
+                
                 return (True,"move from " + str(coords.src) + " to " + str(coords.dst))
+
             elif coords.src == coords.dst:
+                # if unit self-destructs
+                # inflict 2 pts of damage to all units in its surroundings
+                # unit is removed from board
                 cellCorner = listADJ[0].iter_adjacent()
                 listTopCorner = [next(cellCorner), next(cellCorner), next(cellCorner), next(cellCorner)]
                 cellCorner = listADJ[2].iter_adjacent()
@@ -420,33 +418,22 @@ class Game:
                         self.mod_health(cell, -2)
                 self.mod_health(coords.src, -9)
 
-                # INSERT CODE FOR SELF-DESTRUCT
                 return (True,"self-destruct at " + str(coords.src))
 
-
-
+            # if unit is AI or Tech, it can repair another unit
             elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.AI:
-                    #if self.get(coords.dst).type == UnitType.Tech or self.get(coords.dst).type == UnitType.Virus:
                 self.mod_health(coords.dst, unitSRC.repair_amount(unitDST))
-                        #print("unitSRC.repair_amount(unitDST)")
+
                 return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
-                        #repair here
-                    #return (False,"invalid move")
-        
 
-                # INSERT CODE FOR REPAIR
-
-               # return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
             elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.Tech:
                 self.mod_health(coords.dst, unitSRC.repair_amount(unitDST))
 
-                # INSERT CODE FOR REPAIR
-
                 return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
+            
+            # if unit attacks
+            # unit causes damage to target and vice versa
             else:
-
-#BASHAR CHECK THIS
-                # INSERT CODE FOR ATTACK HERE
                 self.mod_health(coords.src, -unitSRC.damage_amount(unitDST))
                 self.mod_health(coords.dst, -unitDST.damage_amount(unitSRC))
                 
@@ -463,27 +450,41 @@ class Game:
         """Pretty text representation of the game."""
         dim = self.options.dim
         output = ""
+        initial_configuration = ""
         output += f"Next player: {self.next_player.name}\n"
         output += f"Turns played: {self.turns_played}\n"
+        initial_configuration += f"Initial configuration: \n"
         coord = Coord()
         output += "\n   "
+        initial_configuration += "\n   "
         for col in range(dim):
             coord.col = col
             label = coord.col_string()
             output += f"{label:^3} "
+            initial_configuration += f"{label:^3} "
         output += "\n"
+        initial_configuration += "\n"
         for row in range(dim):
             coord.row = row
             label = coord.row_string()
             output += f"{label}: "
+            initial_configuration += f"{label}: "
             for col in range(dim):
                 coord.col = col
                 unit = self.get(coord)
                 if unit is None:
                     output += " .  "
+                    initial_configuration += " .  "
                 else:
                     output += f"{str(unit):^3} "
+                    initial_configuration += f"{str(unit):^3} "
             output += "\n"
+            initial_configuration += "\n"
+        if self.turns_played == 0:
+                gameTraceFile = "gameTrace-" + str(self.options.alpha_beta) + "-" + str(self.options.max_time) + "-" + str(self.options.max_turns) + ".txt"
+                file = open(gameTraceFile, "a")
+                file.writelines(initial_configuration + "\n")
+                file.close()
         return output
 
     def __str__(self) -> str:
