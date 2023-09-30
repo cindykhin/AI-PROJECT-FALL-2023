@@ -60,11 +60,11 @@ class Unit:
     ]
     # class variable: repair table for units (based on the unit type constants in order)
     repair_table : ClassVar[list[list[int]]] = [
-        [1,1,1,1,1], # AI
-        [3,1,1,3,3], # Tech
-        [1,1,1,1,1], # Virus
-        [1,1,1,1,1], # Program
-        [1,1,1,1,1], # Firewall
+        [0,1,1,0,0], # AI
+        [3,0,0,3,3], # Tech
+        [0,0,0,0,0], # Virus
+        [0,0,0,0,0], # Program
+        [0,0,0,0,0], # Firewall
     ]
 
     def is_alive(self) -> bool:
@@ -411,13 +411,13 @@ class Game:
 
 
 
-            elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.AI:
-                    if self.get(coords.dst).type == UnitType.Tech or self.get(coords.dst).type == UnitType.Virus:
-                        self.mod_health(coords.dst, unitSRC.repair_amount(unitDST))
-                        print("unitSRC.repair_amount(unitDST)")
-                        return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
+            elif self.get(coords.src).player == self.get(coords.dst).player: #and self.get(coords.src).type == UnitType.AI:
+                    #if self.get(coords.dst).type == UnitType.Tech or self.get(coords.dst).type == UnitType.Virus:
+                self.mod_health(coords.dst, unitSRC.repair_amount(unitDST))
+                        #print("unitSRC.repair_amount(unitDST)")
+                return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
                         #repair here
-                    return (False,"invalid move")
+                    #return (False,"invalid move")
         
 
                 # INSERT CODE FOR REPAIR
@@ -427,7 +427,7 @@ class Game:
 
                 # INSERT CODE FOR REPAIR
 
-                return (True,"repairTECH from " + str(coords.src) + " to " + str(coords.dst))
+                return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
             else:
 
 #BASHAR CHECK THIS
