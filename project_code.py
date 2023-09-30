@@ -358,7 +358,7 @@ class Game:
         if unitSRC.type == UnitType.AI or unitSRC.type == UnitType.Firewall or unitSRC.type == UnitType.Program:
             # Attacker AI, F and P CAN move UP or LEFT
             if unitSRC.player == Player.Attacker:
-            # legal moves for AI, Firewall and Program
+                # legal moves for AI, Firewall and Program
                 attackerMove = [listADJ[0], listADJ[1]] 
                 if coords.dst not in attackerMove:
                     return False
@@ -377,12 +377,12 @@ class Game:
         # Tech can repair AI, Firewall or Program
         if unitDST is not None:
             if unitSRC.player == unitDST.player and unitSRC.type == UnitType.AI:
-                if unitDST.type == UnitType.Virus or unitDST.type == UnitType.Tech:
+                if (unitDST.type == UnitType.Virus or unitDST.type == UnitType.Tech) and unitDST.health != 9:
                     return True
                 else:
                     return False
             if unitSRC.player == unitDST.player and unitSRC.type == UnitType.Tech:
-                if unitDST.type == UnitType.AI or unitDST.type == UnitType.Firewall or unitDST.type == UnitType.Program:
+                if (unitDST.type == UnitType.AI or unitDST.type == UnitType.Firewall or unitDST.type == UnitType.Program) and unitDST.health != 9:
                     return True
                 else:
                     return False
@@ -494,6 +494,10 @@ class Game:
     
     def human_turn(self):
         """Human player plays a move (or get via broker)."""
+        gameTraceFile = "gameTrace-" + str(self.options.alpha_beta) + "-" + str(self.options.max_time) + "-" + str(self.options.max_turns) + ".txt"
+
+        file = open(gameTraceFile, 'a')
+
         if self.options.broker is not None:
             print("Getting next move with auto-retry from game broker...")
             while True:
@@ -513,6 +517,9 @@ class Game:
                 if success:
                     print(f"Player {self.next_player.name}: ",end='')
                     print(result)
+                    file.writelines("turn # " + str(self.turns_played + 1) + "\n")
+                    file.writelines(self.next_player.name + ": " + result + "\n")
+                    file.close()
                     self.next_turn()
                     break
                 else:
@@ -677,6 +684,32 @@ def main():
     # create a new game
     game = Game(options=options)
 
+    gameTraceFile = "gameTrace-" + str(options.alpha_beta) + "-" + str(options.max_time) + "-" + str(options.max_turns) + ".txt"
+
+    file = open(gameTraceFile, 'w')
+
+    file.writelines("t = " + str(options.max_time) + "\n")
+    file.writelines("m = " + str(options.max_turns) + "\n")
+
+    if game.options.game_type != GameType.AttackerVsDefender:
+        alpha_beta = ""
+        if options.alpha_beta == True:
+            alpha_beta = "alpha-beta = on"
+        else:
+            alpha_beta = "alpha-beta = off"
+        file.writelines(alpha_beta + "\n")
+
+    if game.options.game_type == GameType.AttackerVsDefender:
+        file.writelines("player 1 = H & player 2 = H" + "\n\n")
+    elif game.options.game_type == GameType.AttackerVsComp and game.next_player == Player.Attacker:
+        file.writelines("player 1 = H & player 2 = AI" + "\n\n")
+    elif game.options.game_type == GameType.CompVsDefender and game.next_player == Player.Defender:
+        file.writelines("player 1 = AI & player 2 = H" + "\n\n")
+    else:
+        file.writelines("player 1 = AI & player 2 = AI" + "\n\n")
+
+    file.close()
+
     # the main game loop
     while True:
         print()
@@ -684,6 +717,9 @@ def main():
         winner = game.has_winner()
         if winner is not None:
             print(f"{winner.name} wins!")
+            file = open(gameTraceFile, 'a')
+            file.writelines("\n"+ winner.name + " wins in " + str(game.turns_played) + " turns!")
+            file.close()  
             break
         if game.options.game_type == GameType.AttackerVsDefender:
             game.human_turn()
