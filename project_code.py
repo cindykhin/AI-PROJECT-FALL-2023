@@ -450,41 +450,41 @@ class Game:
         """Pretty text representation of the game."""
         dim = self.options.dim
         output = ""
-        initial_configuration = ""
+        configuration = ""
         output += f"Next player: {self.next_player.name}\n"
         output += f"Turns played: {self.turns_played}\n"
-        initial_configuration += f"Initial configuration: \n"
+        if self.turns_played == 0:
+            configuration += f"Initial configuration: \n"
         coord = Coord()
         output += "\n   "
-        initial_configuration += "\n   "
         for col in range(dim):
             coord.col = col
             label = coord.col_string()
             output += f"{label:^3} "
-            initial_configuration += f"{label:^3} "
+            configuration += f"{label:^3} "
         output += "\n"
-        initial_configuration += "\n"
+        configuration += "\n"
         for row in range(dim):
             coord.row = row
             label = coord.row_string()
             output += f"{label}: "
-            initial_configuration += f"{label}: "
+            configuration += f"{label}: "
             for col in range(dim):
                 coord.col = col
                 unit = self.get(coord)
                 if unit is None:
                     output += " .  "
-                    initial_configuration += " .  "
+                    configuration += " .  "
                 else:
                     output += f"{str(unit):^3} "
-                    initial_configuration += f"{str(unit):^3} "
+                    configuration += f"{str(unit):^3} "
             output += "\n"
-            initial_configuration += "\n"
-        if self.turns_played == 0:
-                gameTraceFile = "gameTrace-" + str(self.options.alpha_beta) + "-" + str(self.options.max_time) + "-" + str(self.options.max_turns) + ".txt"
-                file = open(gameTraceFile, "a")
-                file.writelines(initial_configuration + "\n")
-                file.close()
+            configuration += "\n"
+        gameTraceFile = "gameTrace-" + str(self.options.alpha_beta) + "-" + str(self.options.max_time) + "-" + str(self.options.max_turns) + ".txt"
+        file = open(gameTraceFile, "a")
+        file.writelines(configuration + "\n")
+        file.close()
+                
         return output
 
     def __str__(self) -> str:
@@ -734,7 +734,7 @@ def main():
         if winner is not None:
             print(f"{winner.name} wins!")
             file = open(gameTraceFile, 'a')
-            file.writelines("\n"+ winner.name + " wins in " + str(game.turns_played) + " turns!")
+            file.writelines(winner.name + " wins in " + str(game.turns_played) + " turns!")
             file.close()  
             break
         if game.options.game_type == GameType.AttackerVsDefender:
