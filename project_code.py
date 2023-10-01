@@ -333,16 +333,18 @@ class Game:
         if coords.src == coords.dst:
             return True
 
-        # if adjacent cell is occupied by opponent, unit CAN attack opponent
+        # if adjacent cell is occupied by opponent and target is opponent, unit attacks opponent
         if coords.dst in listADJ:
             if self.get(coords.dst) is not None and self.get(coords.dst).player != unitSRC.player:
                 return True
         
-        # if adjacent cell is occupied by opponent and is not attacked, 
+        # if adjacent cell is occupied by opponent and is not attacked
         # already verified if unit attacked opponent 
         # therefore looking for first instance of a cell occupied by opponent that is not the target of unit
+        # if unit is AI, Firewall or Program, unit will NOT move while in combat
+        # unit can move in combat IF it is Tech or Virus
         for cell in listADJ:
-            if self.get(cell) is not None and self.get(cell).player != unitSRC.player:
+            if self.get(cell) is not None and self.get(cell).player != unitSRC.player and (unitSRC.type == UnitType.AI or unitSRC.type == UnitType.Firewall or unitSRC.type == UnitType.Program):
                 # unit is in combat mode and CANNOT move
                 if cell != coords.dst:
                     return False
@@ -362,6 +364,7 @@ class Game:
                 if coords.dst not in defenderMove:
                     return False
         # Tech and Virus CAN move in ALL directions at ALL times
+        # check if target is adjacent to unit in any direction
         else:
             if coords.dst not in listADJ:
                 return False
@@ -380,6 +383,8 @@ class Game:
                     return True
                 else:
                     return False
+
+        # unit moves to empty cell
         else:
             return True
 
@@ -434,8 +439,8 @@ class Game:
             # if unit attacks
             # unit causes damage to target and vice versa
             else:
-                self.mod_health(coords.src, -unitSRC.damage_amount(unitDST))
-                self.mod_health(coords.dst, -unitDST.damage_amount(unitSRC))
+                self.mod_health(coords.src, -unitDST.damage_amount(unitSRC))
+                self.mod_health(coords.dst, -unitSRC.damage_amount(unitDST))
                 
                 return (True,"attack from " + str(coords.src) + " to " + str(coords.dst))
 
