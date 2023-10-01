@@ -2,7 +2,7 @@
 
 This project aims to create a 2-player wargame (attacker vs defender) between human-human, human-ai, ai-human or ai-ai.
 
-##To start the game:
+To start the game:
 1. Run the command "python project_code.py" on your terminal at the location of the file. This will run the game.
 2. Enter an input (manual, attacker, defender or comp) to choose the game type.
 3. When prompted, enter additional game options:
@@ -10,11 +10,11 @@ This project aims to create a 2-player wargame (attacker vs defender) between hu
     b. for attacker, defender or comp: enter the max allowed time the ai has to return a move and select the use of minimax (FALSE) or alpha-beta (TRUE)
 4. The game will start once the game options have been set.
 
-##To play the game:
+To play the game:
 1. Enter a valid move by specifying the coordinates of the source S followed by the coordinates of the target T (eg. E2 D2)
 2. The game will end when a player's AI has been destroyed or when the game reaches its maximum number of turns in which case the defender will be declared as the winner.
 
-##Some rules for movements allowed:
+Some rules for movements allowed:
 1. A unit at S can move to an adjacent cell if said cell is empty.
     a. Attacker AI, Firewall or Program CAN move UP or LEFT.
     b. Defenders AI, Firewall or Program CAN move DOWN or RIGHT.
