@@ -1,6 +1,0 @@
-t = 5.0
-m = 100
-player 1 = H & player 2 = H
-
-turn # 1
-Attacker: self-destruct at C4

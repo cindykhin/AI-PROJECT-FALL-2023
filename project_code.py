@@ -22,9 +22,6 @@ class UnitType(Enum):
     Program = 3
     Firewall = 4
 
-
-
-
 class Player(Enum):
     """The 2 players."""
     Attacker = 0
@@ -97,15 +94,11 @@ class Unit:
             return target.health
         return amount
 
-
-
-
     def repair_amount(self, target: Unit) -> int:
         """How much can this unit repair another unit."""
         amount = self.repair_table[self.type.value][target.type.value]
         if target.health + amount > 9:
-            return 9 - target.health
-        
+            return 9 - target.health  
         return amount
 
 ##############################################################################################################
@@ -340,16 +333,18 @@ class Game:
         if coords.src == coords.dst:
             return True
 
-        # if adjacent cell is occupied by opponent, unit CAN attack opponent
+        # if adjacent cell is occupied by opponent and target is opponent, unit attacks opponent
         if coords.dst in listADJ:
             if self.get(coords.dst) is not None and self.get(coords.dst).player != unitSRC.player:
                 return True
         
-        # if adjacent cell is occupied by opponent and is not attacked, 
+        # if adjacent cell is occupied by opponent and is not attacked
         # already verified if unit attacked opponent 
         # therefore looking for first instance of a cell occupied by opponent that is not the target of unit
+        # if unit is AI, Firewall or Program, unit will NOT move while in combat
+        # unit can move in combat IF it is Tech or Virus
         for cell in listADJ:
-            if self.get(cell) is not None and self.get(cell).player != unitSRC.player:
+            if self.get(cell) is not None and self.get(cell).player != unitSRC.player and (unitSRC.type == UnitType.AI or unitSRC.type == UnitType.Firewall or unitSRC.type == UnitType.Program):
                 # unit is in combat mode and CANNOT move
                 if cell != coords.dst:
                     return False
@@ -369,12 +364,14 @@ class Game:
                 if coords.dst not in defenderMove:
                     return False
         # Tech and Virus CAN move in ALL directions at ALL times
+        # check if target is adjacent to unit in any direction
         else:
             if coords.dst not in listADJ:
                 return False
 
         # AI can repair Virus or Tech
         # Tech can repair AI, Firewall or Program
+        # Repair will fail if unit's health is at maximum (already at 9)
         if unitDST is not None:
             if unitSRC.player == unitDST.player and unitSRC.type == UnitType.AI:
                 if (unitDST.type == UnitType.Virus or unitDST.type == UnitType.Tech) and unitDST.health != 9:
@@ -386,9 +383,10 @@ class Game:
                     return True
                 else:
                     return False
+
+        # unit moves to empty cell
         else:
             return True
-        
 
     def perform_move(self, coords : CoordPair) -> Tuple[bool,str]:
         """Validate and perform a move expressed as a CoordPair. TODO: WRITE MISSING CODE!!!"""
@@ -399,12 +397,17 @@ class Game:
         listADJ = [next(cellADJ), next(cellADJ), next(cellADJ), next(cellADJ)]
        
         if self.is_valid_move(coords):
-            # if cell is free
+            # if cell is free, perform move
             if self.get(coords.dst) is None:
                 self.set(coords.dst,self.get(coords.src))
                 self.set(coords.src,None)
+                
                 return (True,"move from " + str(coords.src) + " to " + str(coords.dst))
+
             elif coords.src == coords.dst:
+                # if unit self-destructs
+                # inflict 2 pts of damage to all units in its surroundings
+                # unit is removed from board
                 cellCorner = listADJ[0].iter_adjacent()
                 listTopCorner = [next(cellCorner), next(cellCorner), next(cellCorner), next(cellCorner)]
                 cellCorner = listADJ[2].iter_adjacent()
@@ -420,35 +423,24 @@ class Game:
                         self.mod_health(cell, -2)
                 self.mod_health(coords.src, -9)
 
-                # INSERT CODE FOR SELF-DESTRUCT
                 return (True,"self-destruct at " + str(coords.src))
 
-
-
+            # if unit is AI or Tech, it can repair another unit
             elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.AI:
-                    #if self.get(coords.dst).type == UnitType.Tech or self.get(coords.dst).type == UnitType.Virus:
                 self.mod_health(coords.dst, unitSRC.repair_amount(unitDST))
-                        #print("unitSRC.repair_amount(unitDST)")
+
                 return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
-                        #repair here
-                    #return (False,"invalid move")
-        
 
-                # INSERT CODE FOR REPAIR
-
-               # return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
             elif self.get(coords.src).player == self.get(coords.dst).player and self.get(coords.src).type == UnitType.Tech:
                 self.mod_health(coords.dst, unitSRC.repair_amount(unitDST))
 
-                # INSERT CODE FOR REPAIR
-
                 return (True,"repair from " + str(coords.src) + " to " + str(coords.dst))
+            
+            # if unit attacks
+            # unit causes damage to target and vice versa
             else:
-
-#BASHAR CHECK THIS
-                # INSERT CODE FOR ATTACK HERE
-                self.mod_health(coords.src, -unitSRC.damage_amount(unitDST))
-                self.mod_health(coords.dst, -unitDST.damage_amount(unitSRC))
+                self.mod_health(coords.src, -unitDST.damage_amount(unitSRC))
+                self.mod_health(coords.dst, -unitSRC.damage_amount(unitDST))
                 
                 return (True,"attack from " + str(coords.src) + " to " + str(coords.dst))
 
@@ -463,27 +455,41 @@ class Game:
         """Pretty text representation of the game."""
         dim = self.options.dim
         output = ""
+        configuration = ""
         output += f"Next player: {self.next_player.name}\n"
         output += f"Turns played: {self.turns_played}\n"
+        if self.turns_played == 0:
+            configuration += f"Initial configuration: \n"
         coord = Coord()
         output += "\n   "
         for col in range(dim):
             coord.col = col
             label = coord.col_string()
             output += f"{label:^3} "
+            configuration += f"{label:^3} "
         output += "\n"
+        configuration += "\n"
         for row in range(dim):
             coord.row = row
             label = coord.row_string()
             output += f"{label}: "
+            configuration += f"{label}: "
             for col in range(dim):
                 coord.col = col
                 unit = self.get(coord)
                 if unit is None:
                     output += " .  "
+                    configuration += " .  "
                 else:
                     output += f"{str(unit):^3} "
+                    configuration += f"{str(unit):^3} "
             output += "\n"
+            configuration += "\n"
+        gameTraceFile = "gameTrace-" + str(self.options.alpha_beta) + "-" + str(self.options.max_time) + "-" + str(self.options.max_turns) + ".txt"
+        file = open(gameTraceFile, "a")
+        file.writelines(configuration + "\n")
+        file.close()
+                
         return output
 
     def __str__(self) -> str:
@@ -699,6 +705,40 @@ def main():
     # create a new game
     game = Game(options=options)
 
+    option_gameType = False
+
+    while option_gameType == False:
+        input_game_type = input(f"Enter the game type (manual, attacker, defender or comp): ")
+        if input_game_type == "manual":
+            game.options.game_type =  GameType.AttackerVsDefender
+            option_gameType = True
+        elif input_game_type == "attacker":
+           game.options.game_type = GameType.AttackerVsComp
+           option_gameType = True
+        elif input_game_type == "defender":
+            game.options.game_type = GameType.AttackerVsDefender
+            option_gameType = True
+        elif input_game_type == "comp":
+            game.options.game_type = GameType.CompVsComp
+            option_gameType = True
+        else: 
+            print("invalid input, please try again")
+
+    option_turns = False
+
+    while option_turns == False:
+        input_max_turns = input(f"Enter the max amount of turns or leave empty to keep default max amount of turns at 100: ")
+        if input_max_turns.isdigit():
+            game.options.max_turns = int(input_max_turns)
+            option_turns = True
+        elif input_max_turns == "":
+            option_turns = True
+        else:
+            print("invalid input, please try again")
+    
+    if game.options.game_type != GameType.AttackerVsDefender:
+        print("Changing other options for an AI player will soon be available!")
+
     gameTraceFile = "gameTrace-" + str(options.alpha_beta) + "-" + str(options.max_time) + "-" + str(options.max_turns) + ".txt"
 
     file = open(gameTraceFile, 'w')
@@ -733,7 +773,7 @@ def main():
         if winner is not None:
             print(f"{winner.name} wins!")
             file = open(gameTraceFile, 'a')
-            file.writelines("\n"+ winner.name + " wins in " + str(game.turns_played) + " turns!")
+            file.writelines(winner.name + " wins in " + str(game.turns_played) + " turns!")
             file.close()  
             break
         if game.options.game_type == GameType.AttackerVsDefender:
