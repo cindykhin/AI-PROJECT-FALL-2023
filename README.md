@@ -3,12 +3,13 @@
 This project aims to create a 2-player wargame (attacker vs defender) between human-human, human-ai, ai-human or ai-ai.
 
 To start the game:
-1. Run the command "python project_code.py" on your terminal at the location of the file. This will run the game.
-2. Enter an input (manual, attacker, defender or comp) to choose the game type.
-3. When prompted, enter additional game options:
+1. Install the request module using the terminal if it is not already installed : pip install requests
+2. Run the command "python project_code.py" on your terminal at the location of the file. This will run the game.
+3. Enter an input (manual, attacker, defender or comp) to choose the game type.
+4. When prompted, enter additional game options:
     a. for all game types: enter the max amount of moves before the game ends
     b. for attacker, defender or comp: enter the max allowed time the ai has to return a move and select the use of minimax (FALSE) or alpha-beta (TRUE)
-4. The game will start once the game options have been set.
+5. The game will start once the game options have been set.
 
 To play the game:
 1. Enter a valid move by specifying the coordinates of the source S followed by the coordinates of the target T (eg. E2 D2)
