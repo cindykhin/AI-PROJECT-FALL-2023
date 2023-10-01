@@ -700,6 +700,40 @@ def main():
     # create a new game
     game = Game(options=options)
 
+    option_gameType = False
+
+    while option_gameType == False:
+        input_game_type = input(f"Enter the game type (manual, attacker, defender or comp): ")
+        if input_game_type == "manual":
+            game.options.game_type =  GameType.AttackerVsDefender
+            option_gameType = True
+        elif input_game_type == "attacker":
+           game.options.game_type = GameType.AttackerVsComp
+           option_gameType = True
+        elif input_game_type == "defender":
+            game.options.game_type = GameType.AttackerVsDefender
+            option_gameType = True
+        elif input_game_type == "comp":
+            game.options.game_type = GameType.CompVsComp
+            option_gameType = True
+        else: 
+            print("invalid input, please try again")
+
+    option_turns = False
+
+    while option_turns == False:
+        input_max_turns = input(f"Enter the max amount of turns or leave empty to keep default max amount of turns at 100: ")
+        if input_max_turns.isdigit():
+            game.options.max_turns = int(input_max_turns)
+            option_turns = True
+        elif input_max_turns == "":
+            option_turns = True
+        else:
+            print("invalid input, please try again")
+    
+    if game.options.game_type != GameType.AttackerVsDefender:
+        print("Changing other options for an AI player will soon be available!")
+
     gameTraceFile = "gameTrace-" + str(options.alpha_beta) + "-" + str(options.max_time) + "-" + str(options.max_turns) + ".txt"
 
     file = open(gameTraceFile, 'w')
