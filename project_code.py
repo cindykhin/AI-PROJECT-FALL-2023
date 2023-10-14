@@ -315,7 +315,6 @@ class Game:
         """Validate a move expressed as a CoordPair. TODO: WRITE MISSING CODE!!!"""
 
         if not self.is_valid_coord(coords.src) or not self.is_valid_coord(coords.dst):
-            print("Coordinates not within board dimensions")
             return False
         
         unitSRC = self.get(coords.src)
@@ -532,28 +531,36 @@ class Game:
                         break
                 sleep(0.1)
         else:
+            file.writelines("turn # " + str(self.turns_played + 1) + "\n")
             while True:
                 mv = self.read_move()
+                file.writelines("Player " + self.next_player.name + ", enter your move: "  + str(mv) + "\n")
                 (success,result) = self.perform_move(mv)
                 if success:
                     print(f"Player {self.next_player.name}: ",end='')
                     print(result)
-                    file.writelines("turn # " + str(self.turns_played + 1) + "\n")
                     file.writelines(self.next_player.name + ": " + result + "\n")
                     file.close()
                     self.next_turn()
                     break
                 else:
+                    file.writelines("The move is not valid! Try again.\n")
                     print("The move is not valid! Try again.")
 
     def computer_turn(self) -> CoordPair | None:
         """Computer plays a move."""
+        gameTraceFile = "gameTrace-" + str(self.options.alpha_beta) + "-" + str(self.options.max_time) + "-" + str(self.options.max_turns) + ".txt"
+        file = open(gameTraceFile, 'a')
+
         mv = self.suggest_move()
         if mv is not None:
             (success,result) = self.perform_move(mv)
             if success:
+                file.writelines("turn # " + str(self.turns_played + 1) + "\n")
                 print(f"Computer {self.next_player.name}: ",end='')
                 print(result)
+                file.writelines("Computer "+ self.next_player.name + ": " + result + "\n")
+                file.close()
                 self.next_turn()
         return mv
 
@@ -586,7 +593,7 @@ class Game:
             move.src = src
             for dst in src.iter_adjacent():
                 move.dst = dst
-                if self.is_valid_move(move):
+                if self.is_valid_move(move) == True:
                     yield move.clone()
             move.dst = src
             yield move.clone()
@@ -600,15 +607,116 @@ class Game:
         else:
             return (0, None, 0)
 
+    def heuristics(self, game: Game, child: CoordPair) -> int:
+        nbAttackerV =  nbAttackerT =  nbAttackerF =  nbAttackerP =  nbAttackerAI = 0
+        nbDefenderV =  nbDefenderT =  nbDefenderF =  nbDefenderP = nbDefenderAI = 0
+
+        if game.next_player == Player.Attacker:
+            attacker_units = game.player_units(game.next_player)
+            defender_units = game.player_units(game.next_player.next())
+        else:
+            attacker_units = game.player_units(game.next_player.next())
+            defender_units = game.player_units(game.next_player)
+            
+        for unitA in attacker_units:
+            if unitA[1].type == UnitType.Virus:
+                nbAttackerV += 1
+            elif unitA[1].type == UnitType.Tech:
+                nbAttackerT += 1
+            elif unitA[1].type == UnitType.Firewall:
+                nbAttackerF += 1
+            elif unitA[1].type == UnitType.Program:
+                nbAttackerP += 1
+            else:
+                nbAttackerAI += 1
+                        
+        for unitD in defender_units:
+            if unitD[1].type == UnitType.Virus:
+                nbDefenderV += 1
+            elif unitD[1].type == UnitType.Tech:
+                nbDefenderT += 1                
+            elif unitD[1].type == UnitType.Firewall:
+                nbDefenderF += 1
+            elif unitD[1].type == UnitType.Program:
+                nbDefenderP += 1
+            else:
+                nbDefenderAI += 1
+
+                
+        e0 = (3 * (nbAttackerV + nbAttackerT + nbAttackerF + nbAttackerP) + 9999 * nbAttackerAI) - (3 * (nbDefenderV + nbDefenderT + nbDefenderF + nbDefenderP) + 9999 * nbDefenderAI)
+
+        return e0
+
+    def minimax(self, game: Game, node: CoordPair, depth: int, alpha: int, beta: int, maximizing: bool) -> int:
+            if depth == 0:
+                return self.heuristics(game, node)
+            
+            node_clone = self.clone()
+            (success, result) = node_clone.perform_move(node)
+            node_list = []
+            if success:
+            # node_clone_current = (node_clone, node, 0)
+                node_list = list(node_clone.move_candidates())
+            if maximizing:
+                max_eval = MIN_HEURISTIC_SCORE
+                for child_node in node_list:
+                    v = node_clone.minimax(node_clone, child_node, depth - 1, alpha, beta, False)
+                    max_eval = max(max_eval, v)
+                    if node_clone.options.alpha_beta == True:
+                        alpha = max(alpha, v)
+                        if beta <= alpha:
+                            break
+                # node_clone_current = (node, max_eval)
+                return max_eval
+            else:
+                min_eval = MAX_HEURISTIC_SCORE
+                for child_node in node_list:
+                    v = node_clone.minimax(node_clone, child_node, depth - 1, alpha, beta, True)
+                    min_eval = min(min_eval, v)
+                    beta = min(beta, v)
+                    if node_clone.options.alpha_beta == True:
+                        if beta <= alpha:
+                            break
+                # node_clone_current = (node, min_eval)
+                return min_eval
+
     def suggest_move(self) -> CoordPair | None:
         """Suggest the next move using minimax alpha beta. TODO: REPLACE RANDOM_MOVE WITH PROPER GAME LOGIC!!!"""
         start_time = datetime.now()
-        (score, move, avg_depth) = self.random_move()
+
+        minimax_clone = self.clone()
+        minimax_clone_move_candidate = list(minimax_clone.move_candidates())
+        
+        move = None
+        score = 0
+        dict = {}
+        value = 0
+        alpha_beta_minimax = self.options.alpha_beta
+        
+        for i in range(len(minimax_clone_move_candidate)):
+            child = minimax_clone_move_candidate[i]
+            if minimax_clone.next_player == Player.Attacker:
+                value = minimax_clone.minimax(minimax_clone, child, minimax_clone.options.max_depth, MIN_HEURISTIC_SCORE, MAX_HEURISTIC_SCORE, True)
+            else:
+                value = minimax_clone.minimax(minimax_clone, child, minimax_clone.options.max_depth, MIN_HEURISTIC_SCORE, MAX_HEURISTIC_SCORE, False)
+            dict[value] = child
+            elapsed_seconds = (datetime.now() - start_time).total_seconds()
+            if minimax_clone.options.max_time - elapsed_seconds <= 0.1:
+                break
+
+        if minimax_clone.next_player == Player.Attacker:
+            move = dict[max(dict)]
+            score = max(dict)
+        else:            
+            move = dict[min(dict)]
+            score = min(dict)
+
+        # (score, move, avg_depth) = self.random_move()
         elapsed_seconds = (datetime.now() - start_time).total_seconds()
         self.stats.total_seconds += elapsed_seconds
         print(f"Heuristic score: {score}")
-        print(f"Average recursive depth: {avg_depth:0.1f}")
-        print(f"Evals per depth: ",end='')
+        # print(f"Average recursive depth: {avg_depth:0.1f}")
+        # print(f"Evals per depth: ",end='')
         for k in sorted(self.stats.evaluations_per_depth.keys()):
             print(f"{k}:{self.stats.evaluations_per_depth[k]} ",end='')
         print()
@@ -715,7 +823,7 @@ def main():
            game.options.game_type = GameType.AttackerVsComp
            option_gameType = True
         elif input_game_type == "defender":
-            game.options.game_type = GameType.AttackerVsDefender
+            game.options.game_type = GameType.CompVsDefender
             option_gameType = True
         elif input_game_type == "comp":
             game.options.game_type = GameType.CompVsComp
@@ -739,7 +847,6 @@ def main():
         print("Changing other options for an AI player will soon be available!")
 
     gameTraceFile = "gameTrace-" + str(options.alpha_beta) + "-" + str(options.max_time) + "-" + str(options.max_turns) + ".txt"
-
     file = open(gameTraceFile, 'w')
 
     file.writelines("t = " + str(options.max_time) + "\n")
