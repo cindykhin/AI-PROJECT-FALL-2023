@@ -225,6 +225,7 @@ class Options:
     max_time : float | None = 5.0
     game_type : GameType = GameType.AttackerVsDefender
     alpha_beta : bool = True
+    e : str | None = None
     max_turns : int | None = 100
     randomize_moves : bool = True
     broker : str | None = None
@@ -611,41 +612,58 @@ class Game:
         nbAttackerV =  nbAttackerT =  nbAttackerF =  nbAttackerP =  nbAttackerAI = 0
         nbDefenderV =  nbDefenderT =  nbDefenderF =  nbDefenderP = nbDefenderAI = 0
 
+        healthAttackerAI = healthAttackerV = healthAttackerT = healthAttackerF = healthAttackerP  = 0
+        healthDefenderAI = healthDefenderV = healthDefenderT = healthDefenderF = healthDefenderP  = 0
+
         if game.next_player == Player.Attacker:
             attacker_units = game.player_units(game.next_player)
             defender_units = game.player_units(game.next_player.next())
         else:
             attacker_units = game.player_units(game.next_player.next())
             defender_units = game.player_units(game.next_player)
-            
+        
         for unitA in attacker_units:
             if unitA[1].type == UnitType.Virus:
+                healthAttackerV = unitA[1].health
                 nbAttackerV += 1
             elif unitA[1].type == UnitType.Tech:
+                healthAttackerT = unitA[1].health
                 nbAttackerT += 1
             elif unitA[1].type == UnitType.Firewall:
+                healthAttackerF = unitA[1].health
                 nbAttackerF += 1
             elif unitA[1].type == UnitType.Program:
+                healthAttackerP = unitA[1].health
                 nbAttackerP += 1
             else:
+                healthAttackerAI = unitA[1].health
                 nbAttackerAI += 1
                         
         for unitD in defender_units:
             if unitD[1].type == UnitType.Virus:
+                healthDefenderV = unitD[1].health
                 nbDefenderV += 1
             elif unitD[1].type == UnitType.Tech:
+                healthDefenderT = unitD[1].health
                 nbDefenderT += 1                
             elif unitD[1].type == UnitType.Firewall:
+                healthDefenderF = unitD[1].health
                 nbDefenderF += 1
             elif unitD[1].type == UnitType.Program:
+                healthDefenderP = unitD[1].health
                 nbDefenderP += 1
             else:
+                healthDefenderAI = unitD[1].health
                 nbDefenderAI += 1
-
-                
-        e0 = (3 * (nbAttackerV + nbAttackerT + nbAttackerF + nbAttackerP) + 9999 * nbAttackerAI) - (3 * (nbDefenderV + nbDefenderT + nbDefenderF + nbDefenderP) + 9999 * nbDefenderAI)
-
-        return e0
+                        
+        if game.options.e == "e0" :
+            e0 = (3 * (nbAttackerV + nbAttackerT + nbAttackerF + nbAttackerP) + 9999 * nbAttackerAI) - (3 * (nbDefenderV + nbDefenderT + nbDefenderF + nbDefenderP) + 9999 * nbDefenderAI)
+            return e0
+        elif game.options.e == "e1":
+            e1 = ((healthAttackerV * nbAttackerV + healthAttackerT * nbAttackerT + healthAttackerF *nbAttackerF + healthAttackerP * nbAttackerP + 9999 * healthAttackerAI * nbAttackerAI) - (healthDefenderV * nbDefenderV + healthDefenderT * nbDefenderT + healthDefenderF *nbDefenderF + healthDefenderP * nbDefenderP + 9999 * healthDefenderAI * nbDefenderAI) )
+            return e1
+            
+      
 
     def minimax(self, game: Game, node: CoordPair, depth: int, alpha: int, beta: int, maximizing: bool) -> int:
             if depth == 0:
@@ -655,7 +673,7 @@ class Game:
             (success, result) = node_clone.perform_move(node)
             node_list = []
             if success:
-            # node_clone_current = (node_clone, node, 0)
+            
                 node_list = list(node_clone.move_candidates())
             if maximizing:
                 max_eval = MIN_HEURISTIC_SCORE
@@ -666,7 +684,7 @@ class Game:
                         alpha = max(alpha, v)
                         if beta <= alpha:
                             break
-                # node_clone_current = (node, max_eval)
+                
                 return max_eval
             else:
                 min_eval = MAX_HEURISTIC_SCORE
@@ -677,7 +695,7 @@ class Game:
                     if node_clone.options.alpha_beta == True:
                         if beta <= alpha:
                             break
-                # node_clone_current = (node, min_eval)
+                
                 return min_eval
 
     def suggest_move(self) -> CoordPair | None:
@@ -842,6 +860,27 @@ def main():
             option_turns = True
         else:
             print("invalid input, please try again")
+
+    alpha_option_beta = False
+    while alpha_option_beta == False:
+        input_alpha_beta = input(f"Enter True to activate alpha beta and False to activate Minimax: ")
+        if input_alpha_beta == "True":
+            game.options.alpha_beta = True
+            alpha_option_beta = True
+        elif input_alpha_beta == "False":
+            game.options.alpha_beta = False
+            alpha_option_beta = True
+        else: 
+            print("Invalid input, please try again")
+
+        
+
+    while game.options.e == None:
+        input_e = input(f"Enter e0, e1 or e2 to set the heuristics: ")
+        if input_e == "e0" or "e1" or "e2":
+            game.options.e = input_e
+        else:
+            print(f"Invalid input please try again")
     
     if game.options.game_type != GameType.AttackerVsDefender:
         print("Changing other options for an AI player will soon be available!")
