@@ -220,9 +220,9 @@ class CoordPair:
 class Options:
     """Representation of the game options."""
     dim: int = 5
-    max_depth : int | None = 4
-    min_depth : int | None = 2
-    max_time : float | None = 5.0
+    max_depth : int | None = 6
+    min_depth : int | None = 1
+    max_time : float | None = 10.0
     game_type : GameType = GameType.AttackerVsDefender
     alpha_beta : bool = True
     e : str | None = None
@@ -662,6 +662,9 @@ class Game:
         elif game.options.e == "e1":
             e1 = ((healthAttackerV * nbAttackerV + healthAttackerT * nbAttackerT + healthAttackerF *nbAttackerF + healthAttackerP * nbAttackerP + 9999 * healthAttackerAI * nbAttackerAI) - (healthDefenderV * nbDefenderV + healthDefenderT * nbDefenderT + healthDefenderF *nbDefenderF + healthDefenderP * nbDefenderP + 9999 * healthDefenderAI * nbDefenderAI) )
             return e1
+        elif game.options.e == "e2":
+            e2 = (((healthAttackerV + 8*nbAttackerV) + (healthAttackerT +10*nbAttackerT) + healthAttackerF *nbAttackerF + healthAttackerP * nbAttackerP + 9999 * healthAttackerAI * nbAttackerAI) - (healthDefenderV * nbDefenderV + healthDefenderT * nbDefenderT + healthDefenderF *nbDefenderF + healthDefenderP * nbDefenderP + 9999 * healthDefenderAI * nbDefenderAI) ) #/ (nbAttackerV + nbAttackerT + nbAttackerF + nbAttackerP + nbAttackerAI -( nbDefenderV + nbDefenderT + nbDefenderF + nbDefenderP + nbDefenderAI))
+            return e2
             
       
 

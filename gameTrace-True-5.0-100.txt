@@ -1,0 +1,576 @@
+t = 5.0
+m = 100
+alpha-beta = on
+player 1 = AI & player 2 = AI
+
+Initial configuration: 
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C: dF9  .   .   .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .  aP9 aV9 aA9 
+
+turn # 1
+Computer Attacker: move from E2 to E1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C: dF9  .   .   .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .  aP9  .  aV9 aA9 
+
+turn # 2
+Player Defender, enter your move: C0 C1
+Defender: move from C0 to C1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C:  .  dF9  .   .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .  aP9  .  aV9 aA9 
+
+turn # 3
+Computer Attacker: move from E3 to E2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C:  .  dF9  .   .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .  aP9 aV9  .  aA9 
+
+turn # 4
+Player Defender, enter your move: C1 D1
+Defender: move from C1 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D:  .  dF9  .  aF9 aV9 
+E:  .  aP9 aV9  .  aA9 
+
+turn # 5
+Computer Attacker: move from D3 to D2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D:  .  dF9 aF9  .  aV9 
+E:  .  aP9 aV9  .  aA9 
+
+turn # 6
+Player Defender, enter your move: D1 E1
+Defender: attack from D1 to E1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D:  .  dF8 aF9  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 7
+Computer Attacker: attack from D2 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D:  .  dF7 aF8  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 8
+Player Defender, enter your move: D1 D2
+Defender: attack from D1 to D2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D:  .  dF6 aF7  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 9
+Computer Attacker: attack from D2 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D:  .  dF5 aF6  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 10
+Player Defender, enter your move: D1 D2
+Defender: attack from D1 to D2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D:  .  dF4 aF5  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 11
+Computer Attacker: attack from D2 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D:  .  dF3 aF4  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 12
+Player Defender, enter your move: B0 C0
+Defender: move from B0 to C0
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C: dT9  .   .   .  aP9 
+D:  .  dF3 aF4  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 13
+Computer Attacker: move from D4 to D3
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C: dT9  .   .   .  aP9 
+D:  .  dF3 aF4 aV9  .  
+E:  .  aP8 aV9  .  aA9 
+
+turn # 14
+Player Defender, enter your move: D1 C1
+The move is not valid! Try again.
+Player Defender, enter your move: C0 D0
+Defender: move from C0 to D0
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF3 aF4 aV9  .  
+E:  .  aP8 aV9  .  aA9 
+
+turn # 15
+Computer Attacker: move from D3 to D4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF3 aF4  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 16
+Player Defender, enter your move: D0 D1
+Defender: repair from D0 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF6 aF4  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 17
+Computer Attacker: attack from D2 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF5 aF3  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 18
+Player Defender, enter your move: D0 D1
+Defender: repair from D0 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF8 aF3  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 19
+Computer Attacker: attack from D2 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF7 aF2  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 20
+Player Defender, enter your move: D0 D1
+Defender: repair from D0 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF9 aF2  .  aV9 
+E:  .  aP8 aV9  .  aA9 
+
+turn # 21
+Computer Attacker: attack from E1 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF8 aF2  .  aV9 
+E:  .  aP7 aV9  .  aA9 
+
+turn # 22
+Player Defender, enter your move: D1 D2
+Defender: attack from D1 to D2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF7 aF1  .  aV9 
+E:  .  aP7 aV9  .  aA9 
+
+turn # 23
+Computer Attacker: attack from E1 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF6 aF1  .  aV9 
+E:  .  aP6 aV9  .  aA9 
+
+turn # 24
+Player Defender, enter your move: D1 D2
+Defender: attack from D1 to D2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF5  .   .  aV9 
+E:  .  aP6 aV9  .  aA9 
+
+turn # 25
+Computer Attacker: attack from E1 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF4  .   .  aV9 
+E:  .  aP5 aV9  .  aA9 
+
+turn # 26
+Player Defender, enter your move: D0 D1
+Defender: repair from D0 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF7  .   .  aV9 
+E:  .  aP5 aV9  .  aA9 
+
+turn # 27
+Computer Attacker: attack from E1 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF6  .   .  aV9 
+E:  .  aP4 aV9  .  aA9 
+
+turn # 28
+Player Defender, enter your move: D1 E1
+Defender: attack from D1 to E1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF5  .   .  aV9 
+E:  .  aP3 aV9  .  aA9 
+
+turn # 29
+Computer Attacker: attack from E1 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF4  .   .  aV9 
+E:  .  aP2 aV9  .  aA9 
+
+turn # 30
+Player Defender, enter your move: D1 E1
+Defender: attack from D1 to E1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF3  .   .  aV9 
+E:  .  aP1 aV9  .  aA9 
+
+turn # 31
+Computer Attacker: self-destruct at E2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF1  .   .  aV9 
+E:  .   .   .   .  aA9 
+
+turn # 32
+Player Defender, enter your move: D0 D1
+Defender: repair from D0 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .   .  
+C:  .   .   .   .  aP9 
+D: dT9 dF4  .   .  aV9 
+E:  .   .   .   .  aA9 
+
+turn # 33
+Computer Attacker: move from C4 to B4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D: dT9 dF4  .   .  aV9 
+E:  .   .   .   .  aA9 
+
+turn # 34
+Player Defender, enter your move: D0 D1
+Defender: repair from D0 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D: dT9 dF7  .   .  aV9 
+E:  .   .   .   .  aA9 
+
+turn # 35
+Computer Attacker: move from E4 to E3
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D: dT9 dF7  .   .  aV9 
+E:  .   .   .  aA9  .  
+
+turn # 36
+Player Defender, enter your move: D1 D2
+Defender: move from D1 to D2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D: dT9  .  dF7  .  aV9 
+E:  .   .   .  aA9  .  
+
+turn # 37
+Computer Attacker: move from D4 to E4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D: dT9  .  dF7  .   .  
+E:  .   .   .  aA9 aV9 
+
+turn # 38
+Player Defender, enter your move: D0 D1
+Defender: move from D0 to D1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9 dF7  .   .  
+E:  .   .   .  aA9 aV9 
+
+turn # 39
+Computer Attacker: move from E4 to D4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9 dF7  .  aV9 
+E:  .   .   .  aA9  .  
+
+turn # 40
+Player Defender, enter your move: D2 E2
+Defender: move from D2 to E2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9  .   .  aV9 
+E:  .   .  dF7 aA9  .  
+
+turn # 41
+Computer Attacker: move from D4 to E4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9  .   .   .  
+E:  .   .  dF7 aA9 aV9 
+
+turn # 42
+Player Defender, enter your move: E2 E3
+Defender: attack from E2 to E3
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9  .   .   .  
+E:  .   .  dF6 aA8 aV9 
+
+turn # 43
+Computer Attacker: move from E4 to D4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9  .   .  aV9 
+E:  .   .  dF6 aA8  .  
+
+turn # 44
+Player Defender, enter your move: E2 E3
+Defender: attack from E2 to E3
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9  .   .  aV9 
+E:  .   .  dF5 aA7  .  
+
+turn # 45
+Computer Attacker: move from D4 to E4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9  .   .   .  
+E:  .   .  dF5 aA7 aV9 
+
+turn # 46
+Player Defender, enter your move: E2 E3
+Defender: attack from E2 to E3
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9  .   .   .  
+E:  .   .  dF4 aA6 aV9 
+
+turn # 47
+Computer Attacker: move from E4 to D4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9  .   .  aV9 
+E:  .   .  dF4 aA6  .  
+
+turn # 48
+Player Defender, enter your move: E2 E3
+Defender: attack from E2 to E3
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9  .   .  aV9 
+E:  .   .  dF3 aA5  .  
+
+turn # 49
+Computer Attacker: move from D4 to E4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9  .   .   .  
+E:  .   .  dF3 aA5 aV9 
+
+turn # 50
+Player Defender, enter your move: E2 E3
+Defender: attack from E2 to E3
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9  .   .   .  
+E:  .   .  dF2 aA4 aV9 
+
+turn # 51
+Computer Attacker: move from E4 to D4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .  dT9  .   .  aV9 
+E:  .   .  dF2 aA4  .  
+
+turn # 52
+Player Defender, enter your move: D1 E1
+Defender: move from D1 to E1
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .   .   .   .  aV9 
+E:  .  dT9 dF2 aA4  .  
+
+turn # 53
+Computer Attacker: attack from E3 to E2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .   .   .   .  aV9 
+E:  .  dT9 dF1 aA3  .  
+
+turn # 54
+Player Defender, enter your move: E1 E2
+Defender: repair from E1 to E2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .   .   .   .  aV9 
+E:  .  dT9 dF4 aA3  .  
+
+turn # 55
+Computer Attacker: move from D4 to E4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .   .   .   .   .  
+E:  .  dT9 dF4 aA3 aV9 
+
+turn # 56
+Player Defender, enter your move: E1 E2
+Defender: repair from E1 to E2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .   .   .   .   .  
+E:  .  dT9 dF7 aA3 aV9 
+
+turn # 57
+Computer Attacker: move from E4 to D4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .   .   .   .  aV9 
+E:  .  dT9 dF7 aA3  .  
+
+turn # 58
+Player Defender, enter your move: E2 E3
+Defender: attack from E2 to E3
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .   .   .   .  aV9 
+E:  .  dT9 dF6 aA2  .  
+
+turn # 59
+Computer Attacker: self-destruct at D4
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B:  .  dP9  .   .  aP9 
+C:  .   .   .   .   .  
+D:  .   .   .   .   .  
+E:  .  dT9 dF6  .   .  
+
+Defender wins in 59 turns!
