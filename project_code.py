@@ -723,6 +723,8 @@ class Game:
         # computer starts timer for time limit to return a move
         self.start_time_comp = datetime.now()
 
+        self.stats.non_root = self.stats.non_leaf = 0
+
         # clone the game for minimax/alpha-beta
         minimax_clone = self.clone()
         minimax_clone_move_candidate = list(minimax_clone.move_candidates())
@@ -931,6 +933,17 @@ def main():
                 game.options.alpha_beta = False
                 alpha_option_beta = True
             else: 
+                print("Invalid input, please try again.")
+
+        options_depth = False
+        while options_depth == False:
+            input_max_depth = input(f"Enter the max depth for heuritic search or leave empty to keep default max depth at 4: ")
+            if input_max_depth.isdigit():
+                game.options.max_depth = int(input_max_depth)
+                options_depth = True
+            elif input_max_turns == "":
+                options_depth = True
+            else:
                 print("Invalid input, please try again.")    
 
         while game.options.e == None:
