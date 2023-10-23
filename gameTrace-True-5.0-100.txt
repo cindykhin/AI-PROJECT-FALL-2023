@@ -1,0 +1,415 @@
+t = 5.0
+m = 100
+alpha-beta = ON
+heuristics = e2
+player 1 = H & player 2 = AI
+
+Initial configuration: 
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C: dF9  .   .   .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .  aP9 aV9 aA9 
+
+turn # 1
+Player Attacker, enter your move: E2 D2
+Attacker: move from E2 to D2
+ 0   1   2   3   4  
+A: dA9 dT9 dF9  .   .  
+B: dT9 dP9  .   .   .  
+C: dF9  .   .   .  aP9 
+D:  .   .  aP9 aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 2
+Computer Attacker: self-destruct at A1
+Elapsed time: 5.032804
+Heuristic score: 20021
+Culmulative evals: 3969
+Culmulative evals per depth: 0=1 1=2 2=30 3=163 4=913 5=2860 
+Culmulative % evals per depth: 0=0.0252% 1=0.0504% 2=0.7559% 3=4.1068% 4=23.0033% 5=72.0585% 
+Average branching factor: 11.888
+ 0   1   2   3   4  
+A: dA7  .  dF7  .   .  
+B: dT7 dP7  .   .   .  
+C: dF9  .   .   .  aP9 
+D:  .   .  aP9 aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 3
+Player Attacker, enter your move: D2 C2
+Attacker: move from D2 to C2
+ 0   1   2   3   4  
+A: dA7  .  dF7  .   .  
+B: dT7 dP7  .   .   .  
+C: dF9  .  aP9  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 4
+Computer Attacker: move from A2 to B2
+Elapsed time: 5.019971
+Heuristic score: 20020
+Culmulative evals: 8562
+Culmulative evals per depth: 0=2 1=6 2=83 3=360 4=2077 5=6034 
+Culmulative % evals per depth: 0=0.0234% 1=0.0701% 2=0.9694% 3=4.2046% 4=24.2584% 5=70.4742% 
+Average branching factor: 10.93
+ 0   1   2   3   4  
+A: dA7  .   .   .   .  
+B: dT7 dP7 dF7  .   .  
+C: dF9  .  aP9  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 5
+Player Attacker, enter your move: C2 B2
+Attacker: attack from C2 to B2
+ 0   1   2   3   4  
+A: dA7  .   .   .   .  
+B: dT7 dP7 dF6  .   .  
+C: dF9  .  aP8  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 6
+Computer Attacker: repair from B0 to A0
+Elapsed time: 5.008738
+Heuristic score: 23
+Culmulative evals: 12071
+Culmulative evals per depth: 0=3 1=10 2=130 3=506 4=3027 5=8395 
+Culmulative % evals per depth: 0=0.0249% 1=0.0828% 2=1.077% 3=4.1919% 4=25.0766% 5=69.5468% 
+Average branching factor: 10.497
+ 0   1   2   3   4  
+A: dA9  .   .   .   .  
+B: dT7 dP7 dF6  .   .  
+C: dF9  .  aP8  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 7
+Player Attacker, enter your move: C2 B2
+Attacker: attack from C2 to B2
+ 0   1   2   3   4  
+A: dA9  .   .   .   .  
+B: dT7 dP7 dF5  .   .  
+C: dF9  .  aP7  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 8
+Computer Attacker: repair from B0 to B1
+Elapsed time: 4.996065
+Heuristic score: 21
+Culmulative evals: 15829
+Culmulative evals per depth: 0=4 1=14 2=175 3=671 4=4087 5=10878 
+Culmulative % evals per depth: 0=0.0253% 1=0.0884% 2=1.1056% 3=4.2391% 4=25.8197% 5=68.722% 
+Average branching factor: 10.225
+ 0   1   2   3   4  
+A: dA9  .   .   .   .  
+B: dT7 dP9 dF5  .   .  
+C: dF9  .  aP7  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 9
+Player Attacker, enter your move: C2 B2
+Attacker: attack from C2 to B2
+ 0   1   2   3   4  
+A: dA9  .   .   .   .  
+B: dT7 dP9 dF4  .   .  
+C: dF9  .  aP6  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 10
+Computer Attacker: move from B1 to C1
+Elapsed time: 5.008529
+Heuristic score: 21
+Culmulative evals: 19763
+Culmulative evals per depth: 0=5 1=19 2=228 3=880 4=5181 5=13450 
+Culmulative % evals per depth: 0=0.0253% 1=0.0961% 2=1.1537% 3=4.4528% 4=26.2157% 5=68.0565% 
+Average branching factor: 9.915
+ 0   1   2   3   4  
+A: dA9  .   .   .   .  
+B: dT7  .  dF4  .   .  
+C: dF9 dP9 aP6  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 11
+Player Attacker, enter your move: C2 B2
+Attacker: attack from C2 to B2
+ 0   1   2   3   4  
+A: dA9  .   .   .   .  
+B: dT7  .  dF3  .   .  
+C: dF9 dP9 aP5  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 12
+Computer Attacker: move from B0 to B1
+Elapsed time: 5.005546
+Heuristic score: 21
+Culmulative evals: 23824
+Culmulative evals per depth: 0=6 1=23 2=273 3=1079 4=6159 5=16284 
+Culmulative % evals per depth: 0=0.0252% 1=0.0965% 2=1.1459% 3=4.529% 4=25.8521% 5=68.3512% 
+Average branching factor: 9.822
+ 0   1   2   3   4  
+A: dA9  .   .   .   .  
+B:  .  dT7 dF3  .   .  
+C: dF9 dP9 aP5  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 13
+Player Attacker, enter your move: C2 B2
+Attacker: attack from C2 to B2
+ 0   1   2   3   4  
+A: dA9  .   .   .   .  
+B:  .  dT7 dF2  .   .  
+C: dF9 dP9 aP4  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 14
+Computer Attacker: move from A0 to A1
+Elapsed time: 5.008147
+Heuristic score: 90010
+Culmulative evals: 27332
+Culmulative evals per depth: 0=7 1=26 2=306 3=1234 4=6950 5=18809 
+Culmulative % evals per depth: 0=0.0256% 1=0.0951% 2=1.1196% 3=4.5149% 4=25.4281% 5=68.8168% 
+Average branching factor: 9.768
+ 0   1   2   3   4  
+A:  .  dA9  .   .   .  
+B:  .  dT7 dF2  .   .  
+C: dF9 dP9 aP4  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 15
+Player Attacker, enter your move: C2 B2
+Attacker: attack from C2 to B2
+ 0   1   2   3   4  
+A:  .  dA9  .   .   .  
+B:  .  dT7 dF1  .   .  
+C: dF9 dP9 aP3  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 16
+Computer Attacker: move from B1 to B0
+Elapsed time: 5.006054
+Heuristic score: 21
+Culmulative evals: 31583
+Culmulative evals per depth: 0=8 1=30 2=350 3=1414 4=7894 5=21887 
+Culmulative % evals per depth: 0=0.0253% 1=0.095% 2=1.1082% 3=4.4771% 4=24.9945% 5=69.2999% 
+Average branching factor: 9.695
+ 0   1   2   3   4  
+A:  .  dA9  .   .   .  
+B: dT7  .  dF1  .   .  
+C: dF9 dP9 aP3  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 17
+Player Attacker, enter your move: C2 B2
+Attacker: attack from C2 to B2
+ 0   1   2   3   4  
+A:  .  dA9  .   .   .  
+B: dT7  .   .   .   .  
+C: dF9 dP9 aP2  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 18
+Computer Attacker: self-destruct at B0
+Elapsed time: 5.005611
+Heuristic score: 20046
+Culmulative evals: 36184
+Culmulative evals per depth: 0=9 1=36 2=401 3=1637 4=9023 5=25078 
+Culmulative % evals per depth: 0=0.0249% 1=0.0995% 2=1.1082% 3=4.5241% 4=24.9364% 5=69.3069% 
+Average branching factor: 9.499
+ 0   1   2   3   4  
+A:  .  dA7  .   .   .  
+B:  .   .   .   .   .  
+C: dF7 dP7 aP2  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 19
+Player Attacker, enter your move: C2 C1
+Attacker: attack from C2 to C1
+ 0   1   2   3   4  
+A:  .  dA7  .   .   .  
+B:  .   .   .   .   .  
+C: dF7 dP4  .   .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 20
+Computer Attacker: move from C1 to C2
+Elapsed time: 3.460228
+Heuristic score: 20051
+Culmulative evals: 38748
+Culmulative evals per depth: 0=10 1=44 2=460 3=1858 4=9752 5=26624 
+Culmulative % evals per depth: 0=0.0258% 1=0.1136% 2=1.1872% 3=4.7951% 4=25.1678% 5=68.7106% 
+Average branching factor: 9.158
+ 0   1   2   3   4  
+A:  .  dA7  .   .   .  
+B:  .   .   .   .   .  
+C: dF7  .  dP4  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .   .  aV9 aA9 
+
+turn # 21
+Player Attacker, enter your move: E3 E2
+Attacker: move from E3 to E2
+ 0   1   2   3   4  
+A:  .  dA7  .   .   .  
+B:  .   .   .   .   .  
+C: dF7  .  dP4  .  aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .  aV9  .  aA9 
+
+turn # 22
+Computer Attacker: move from C2 to C3
+Elapsed time: 4.0578
+Heuristic score: 20047
+Culmulative evals: 42179
+Culmulative evals per depth: 0=11 1=53 2=531 3=2143 4=10681 5=28760 
+Culmulative % evals per depth: 0=0.0261% 1=0.1257% 2=1.2589% 3=5.0807% 4=25.323% 5=68.1856% 
+Average branching factor: 8.827
+ 0   1   2   3   4  
+A:  .  dA7  .   .   .  
+B:  .   .   .   .   .  
+C: dF7  .   .  dP4 aP9 
+D:  .   .   .  aF9 aV9 
+E:  .   .  aV9  .  aA9 
+
+turn # 23
+Player Attacker, enter your move: D3 C3
+Attacker: attack from D3 to C3
+ 0   1   2   3   4  
+A:  .  dA7  .   .   .  
+B:  .   .   .   .   .  
+C: dF7  .   .  dP3 aP9 
+D:  .   .   .  aF8 aV9 
+E:  .   .  aV9  .  aA9 
+
+turn # 24
+Computer Attacker: attack from C3 to D3
+Elapsed time: 3.613994
+Heuristic score: 20045
+Culmulative evals: 45262
+Culmulative evals per depth: 0=12 1=62 2=600 3=2421 4=11542 5=30625 
+Culmulative % evals per depth: 0=0.0265% 1=0.137% 2=1.3256% 3=5.3489% 4=25.5004% 5=67.6616% 
+Average branching factor: 8.527
+ 0   1   2   3   4  
+A:  .  dA7  .   .   .  
+B:  .   .   .   .   .  
+C: dF7  .   .  dP2 aP9 
+D:  .   .   .  aF7 aV9 
+E:  .   .  aV9  .  aA9 
+
+turn # 25
+Player Attacker, enter your move: D3 C3
+Attacker: attack from D3 to C3
+ 0   1   2   3   4  
+A:  .  dA7  .   .   .  
+B:  .   .   .   .   .  
+C: dF7  .   .  dP1 aP9 
+D:  .   .   .  aF6 aV9 
+E:  .   .  aV9  .  aA9 
+
+turn # 26
+Computer Attacker: self-destruct at C3
+Elapsed time: 2.675165
+Heuristic score: 20044
+Culmulative evals: 47830
+Culmulative evals per depth: 0=13 1=71 2=666 3=2670 4=12306 5=32104 
+Culmulative % evals per depth: 0=0.0272% 1=0.1484% 2=1.3924% 3=5.5823% 4=25.7286% 5=67.1211% 
+Average branching factor: 8.255
+ 0   1   2   3   4  
+A:  .  dA7  .   .   .  
+B:  .   .   .   .   .  
+C: dF7  .   .   .  aP7 
+D:  .   .   .  aF4 aV7 
+E:  .   .  aV9  .  aA9 
+
+turn # 27
+Player Attacker, enter your move: E2 D2
+Attacker: move from E2 to D2
+ 0   1   2   3   4  
+A:  .  dA7  .   .   .  
+B:  .   .   .   .   .  
+C: dF7  .   .   .  aP7 
+D:  .   .  aV9 aF4 aV7 
+E:  .   .   .   .  aA9 
+
+turn # 28
+Computer Attacker: self-destruct at C0
+Elapsed time: 0.574976
+Heuristic score: -2000000000
+Culmulative evals: 48351
+Culmulative evals per depth: 0=14 1=77 2=696 3=2740 4=12494 5=32330 
+Culmulative % evals per depth: 0=0.029% 1=0.1593% 2=1.4395% 3=5.6669% 4=25.8402% 5=66.8652% 
+Average branching factor: 8.16
+ 0   1   2   3   4  
+A:  .  dA7  .   .   .  
+B:  .   .   .   .   .  
+C:  .   .   .   .  aP7 
+D:  .   .  aV9 aF4 aV7 
+E:  .   .   .   .  aA9 
+
+turn # 29
+Player Attacker, enter your move: D2 C2
+Attacker: move from D2 to C2
+ 0   1   2   3   4  
+A:  .  dA7  .   .   .  
+B:  .   .   .   .   .  
+C:  .   .  aV9  .  aP7 
+D:  .   .   .  aF4 aV7 
+E:  .   .   .   .  aA9 
+
+turn # 30
+Computer Attacker: move from A1 to A2
+Elapsed time: 0.032437
+Heuristic score: -2000000000
+Culmulative evals: 48379
+Culmulative evals per depth: 0=15 1=80 2=702 3=2746 4=12499 5=32337 
+Culmulative % evals per depth: 0=0.031% 1=0.1654% 2=1.451% 3=5.676% 4=25.8356% 5=66.841% 
+Average branching factor: 8.151
+ 0   1   2   3   4  
+A:  .   .  dA7  .   .  
+B:  .   .   .   .   .  
+C:  .   .  aV9  .  aP7 
+D:  .   .   .  aF4 aV7 
+E:  .   .   .   .  aA9 
+
+turn # 31
+Player Attacker, enter your move: C2 B2
+Attacker: move from C2 to B2
+ 0   1   2   3   4  
+A:  .   .  dA7  .   .  
+B:  .   .  aV9  .   .  
+C:  .   .   .   .  aP7 
+D:  .   .   .  aF4 aV7 
+E:  .   .   .   .  aA9 
+
+turn # 32
+Computer Attacker: self-destruct at A2
+Elapsed time: 0.007994
+Heuristic score: 2000000000
+Culmulative evals: 48382
+Culmulative evals per depth: 0=16 1=82 2=702 3=2746 4=12499 5=32337 
+Culmulative % evals per depth: 0=0.0331% 1=0.1695% 2=1.451% 3=5.6757% 4=25.834% 5=66.8368% 
+Average branching factor: 8.15
+ 0   1   2   3   4  
+A:  .   .   .   .   .  
+B:  .   .  aV7  .   .  
+C:  .   .   .   .  aP7 
+D:  .   .   .  aF4 aV7 
+E:  .   .   .   .  aA9 
+
+Attacker wins in 32 turns!

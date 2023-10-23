@@ -220,8 +220,8 @@ class CoordPair:
 class Options:
     """Representation of the game options."""
     dim: int = 5
-    max_depth : int | None = 4
-    min_depth : int | None = 2
+    max_depth : int | None = 5
+    min_depth : int | None = 0
     max_time : float | None = 5.0
     game_type : GameType = GameType.AttackerVsDefender
     alpha_beta : bool = True
@@ -673,6 +673,9 @@ class Game:
         elif game.options.e == "e1":
             e1 = ((healthAttackerV * nbAttackerV + healthAttackerT * nbAttackerT + healthAttackerF *nbAttackerF + healthAttackerP * nbAttackerP + 9999 * healthAttackerAI * nbAttackerAI) - (healthDefenderV * nbDefenderV + healthDefenderT * nbDefenderT + healthDefenderF *nbDefenderF + healthDefenderP * nbDefenderP + 9999 * healthDefenderAI * nbDefenderAI) )
             return e1
+        elif game.options.e == "e2":
+            e2 = (((healthAttackerV + 8*nbAttackerV) + (healthAttackerT +10*nbAttackerT) + (healthAttackerF +10*nbAttackerF) + (healthAttackerP +8* nbAttackerP) + 9999 * healthAttackerAI * nbAttackerAI) - ((healthDefenderV * nbDefenderV) + (healthDefenderT+8 * nbDefenderT) + (healthDefenderF+8 *nbDefenderF) + (healthDefenderP +10* nbDefenderP) + 9999 * healthDefenderAI * nbDefenderAI) ) #/ (nbAttackerV + nbAttackerT + nbAttackerF + nbAttackerP + nbAttackerAI -( nbDefenderV + nbDefenderT + nbDefenderF + nbDefenderP + nbDefenderAI))
+            return e2
             
       
 
@@ -710,11 +713,11 @@ class Game:
             for child_node in node_list:
                 v = node_clone.minimax(node_clone, child_node, depth - 1, alpha, beta, True)
                 min_eval = min(min_eval, v)
-                beta = min(beta, v)
+                beta = min(beta, v) # is this line position correct?
                 # perform alpha-beta pruning if alpha_beta == True
                 if node_clone.options.alpha_beta == True:
                     if beta <= alpha:
-                        break
+                        break 
             return min_eval
 
     def suggest_move(self) -> CoordPair | None:
