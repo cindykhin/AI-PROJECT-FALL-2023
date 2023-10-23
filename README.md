@@ -22,7 +22,7 @@ This project aims to create a 2-player wargame (attacker vs defender) between hu
 5. The game will start once the game options have been set.
 
 ## To play the game:
-1. When prompted enter a valid move by specifying the coordinates of the source S followed by the coordinates of the target T (eg. E2 D2) or wait until the computer returns a move
+1. When prompted enter a valid move by specifying the coordinates of the source S followed by the coordinates of the target T (eg. E2 D2) or wait until the ai returns a move
 2. The game will end when a player's AI has been destroyed or when the game reaches its maximum number of turns in which case the defender will be declared as the winner.
 
 ## Some rules for moves allowed:
@@ -43,6 +43,6 @@ This project aims to create a 2-player wargame (attacker vs defender) between hu
 5. An AI or Tech unit can repair a unit if it belongs to them. The repairs allowed are based on a repair table.
 6. If the current player plays an invalid move:
     - The player will only receive a warning if the player is a human, and can reattempt moves indefinitely.
-    - The player looses the game if the player is a computer.
-7. For a computer, if it exceeds the time limit it has to return a move, it will loose the game.
+    - The player immediately looses the game if the player is a ai.
+7. For an ai, if it performs an illegal move or if it exceeds the time limit it has to return a move, it will immediately loose the game.
 
