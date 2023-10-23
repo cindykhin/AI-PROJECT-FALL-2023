@@ -239,6 +239,7 @@ class Stats:
     total_seconds: float = 0.0
     non_leaf : int = 0
     non_root : int = 0
+    time_limit : bool = False
 
 ##############################################################################################################
 
@@ -466,6 +467,7 @@ class Game:
             configuration += f"Initial configuration: \n"
         coord = Coord()
         output += "\n   "
+        configuration += "   "
         for col in range(dim):
             coord.col = col
             label = coord.col_string()
@@ -536,7 +538,7 @@ class Game:
                         break
                 sleep(0.1)
         else:
-            file.writelines("turn # " + str(self.turns_played + 1) + "\n")
+            file.writelines("turn # " + str(self.turns_played + 1) + ": " + self.next_player.name + "\n")
             while True:
                 mv = self.read_move()
                 file.writelines("Player " + self.next_player.name + ", enter your move: "  + str(mv) + "\n")
@@ -561,18 +563,33 @@ class Game:
         if move is not None:
             (success,result) = self.perform_move(move)
             if success:
-                file.writelines("turn # " + str(self.turns_played + 1) + "\n")
+                file.writelines("turn # " + str(self.turns_played + 1) + ": " + self.next_player.name + "\n")
                 print(f"Computer {self.next_player.name}: ",end='')
                 print(result)
-                self.next_turn()
+                print("Elapsed time: " + str(elapsed_seconds))
+                print("Heuristic score: " + str(score))
+                print("Culmulative evals: " + str(total_evals))
+                print("Culmulative evals per depth: " + evals_depth)
+                print("Culmulative % evals per depth: " + evals_percentage)
+                if self.stats.total_seconds > 0:
+                    print(f"Eval perf.: {total_evals/self.stats.total_seconds/1000:0.3f}k/s")
+                print("Average branching factor: " + str(avg_branching) + "\n")
                 file.writelines("Computer "+ self.next_player.name + ": " + result + "\n")
                 file.writelines("Elapsed time: " + str(elapsed_seconds) + "\n")
                 file.writelines("Heuristic score: " + str(score) + "\n")
                 file.writelines("Culmulative evals: " + str(total_evals) + "\n")
                 file.writelines("Culmulative evals per depth: " + evals_depth + "\n")
                 file.writelines("Culmulative % evals per depth: " + evals_percentage + "\n")
+                if self.stats.total_seconds > 0:
+                    file.writelines("Eval perf.: " + str(round((total_evals/self.stats.total_seconds/1000), 3)) + "k/s\n")
                 file.writelines("Average branching factor: " + str(avg_branching) + "\n")
                 file.close()
+                self.next_turn()
+
+                
+
+                if elapsed_seconds > self.options.max_time:
+                    self.stats.time_limit = True
         return move
 
     def player_units(self, player: Player) -> Iterable[Tuple[Coord,Unit]]:
@@ -588,8 +605,12 @@ class Game:
 
     def has_winner(self) -> Player | None:
         """Check if the game is over and returns winner"""
+        # if max turns is reached, defender wins
         if self.options.max_turns is not None and self.turns_played >= self.options.max_turns:
             return Player.Defender
+        # if time limit is surpassed by the ai, ai looses and opponent wins
+        if self.stats.time_limit == True:
+            return self.next_player
         if self._attacker_has_ai:
             if self._defender_has_ai:
                 return None
@@ -669,12 +690,11 @@ class Game:
         if game.options.e == "e0" :
             e0 = (3 * (nbAttackerV + nbAttackerT + nbAttackerF + nbAttackerP) + 9999 * nbAttackerAI) - (3 * (nbDefenderV + nbDefenderT + nbDefenderF + nbDefenderP) + 9999 * nbDefenderAI)
             return e0
-
         elif game.options.e == "e1":
             e1 = ((healthAttackerV * nbAttackerV + healthAttackerT * nbAttackerT + healthAttackerF *nbAttackerF + healthAttackerP * nbAttackerP + 9999 * healthAttackerAI * nbAttackerAI) - (healthDefenderV * nbDefenderV + healthDefenderT * nbDefenderT + healthDefenderF *nbDefenderF + healthDefenderP * nbDefenderP + 9999 * healthDefenderAI * nbDefenderAI) )
             return e1
         elif game.options.e == "e2":
-            e2 = (((healthAttackerV + 8*nbAttackerV) + (healthAttackerT +10*nbAttackerT) + (healthAttackerF +10*nbAttackerF) + (healthAttackerP +8* nbAttackerP) + 9999 * healthAttackerAI * nbAttackerAI) - ((healthDefenderV * nbDefenderV) + (healthDefenderT+8 * nbDefenderT) + (healthDefenderF+8 *nbDefenderF) + (healthDefenderP +10* nbDefenderP) + 9999 * healthDefenderAI * nbDefenderAI) ) #/ (nbAttackerV + nbAttackerT + nbAttackerF + nbAttackerP + nbAttackerAI -( nbDefenderV + nbDefenderT + nbDefenderF + nbDefenderP + nbDefenderAI))
+            e2 = (((healthAttackerV + 8 * nbAttackerV) + (healthAttackerT + 10 * nbAttackerT) + (healthAttackerF + 10 * nbAttackerF) + (healthAttackerP + 8 * nbAttackerP) + 9999 * healthAttackerAI * nbAttackerAI) - ((healthDefenderV * nbDefenderV) + (healthDefenderT + 8 * nbDefenderT) + (healthDefenderF+8 * nbDefenderF) + (healthDefenderP +10 * nbDefenderP) + 9999 * healthDefenderAI * nbDefenderAI) ) #/ (nbAttackerV + nbAttackerT + nbAttackerF + nbAttackerP + nbAttackerAI -( nbDefenderV + nbDefenderT + nbDefenderF + nbDefenderP + nbDefenderAI))
             return e2
             
       
@@ -684,7 +704,7 @@ class Game:
 
         # check time for time limit
         elapsed_seconds = (datetime.now() - self.start_time_comp).total_seconds()
-        if depth == 0 or (self.options.max_time - elapsed_seconds) <= self.options.max_depth/1000:
+        if depth == 0 or (self.options.max_time - elapsed_seconds) <= (1 / self.options.max_depth) / 10:
             return self.heuristics(game, node)
         
         node_clone = self.clone()
@@ -702,9 +722,9 @@ class Game:
             for child_node in node_list:
                 v = node_clone.minimax(node_clone, child_node, depth - 1, alpha, beta, False)
                 max_eval = max(max_eval, v)
+                alpha = max(alpha, v)
                 # perform alpha-beta pruning if alpha_beta == True
                 if node_clone.options.alpha_beta == True:
-                    alpha = max(alpha, v)
                     if beta <= alpha:
                         break
             return max_eval
@@ -713,7 +733,7 @@ class Game:
             for child_node in node_list:
                 v = node_clone.minimax(node_clone, child_node, depth - 1, alpha, beta, True)
                 min_eval = min(min_eval, v)
-                beta = min(beta, v) # is this line position correct?
+                beta = min(beta, v)
                 # perform alpha-beta pruning if alpha_beta == True
                 if node_clone.options.alpha_beta == True:
                     if beta <= alpha:
@@ -726,10 +746,12 @@ class Game:
         # computer starts timer for time limit to return a move
         self.start_time_comp = datetime.now()
 
+        self.stats.non_root = self.stats.non_leaf = 0
+
         # clone the game for minimax/alpha-beta
         minimax_clone = self.clone()
         minimax_clone_move_candidate = list(minimax_clone.move_candidates())
-        
+
         move = None
         score = 0
         dict = {}
@@ -753,7 +775,7 @@ class Game:
         for i in range(len(minimax_clone_move_candidate)):
             # check if time is up
             elapsed_seconds = (datetime.now() - self.start_time_comp).total_seconds()
-            if (self.options.max_time - elapsed_seconds) <= self.options.max_depth/1000 :
+            if (self.options.max_time - elapsed_seconds) <= (1 / self.options.max_depth) / 10:
                 break
             child = minimax_clone_move_candidate[i]
             # children of node are non-root nodes
@@ -774,24 +796,14 @@ class Game:
         # produce stats of the game
         elapsed_seconds = (datetime.now() - self.start_time_comp).total_seconds()
         self.stats.total_seconds += elapsed_seconds
-        print(f"Elapsed time: {elapsed_seconds:0.3f}s")
-        print(f"Heuristic score: {score}")
         total_evals = sum(self.stats.evaluations_per_depth.values())
-        print(f"Culmulative evals: {total_evals}")
-        print(f"Culmulative evals per depth: ",end='')
         evals_depth = ""
         for k in sorted(self.stats.evaluations_per_depth.keys()):
             evals_depth += (str(k) + "=" + str(self.stats.evaluations_per_depth[k]) + " ")
-        print(evals_depth)
-        print(f"Culmulative % evals per depth: ",end='')
         evals_percentage = ""
         for k in sorted(self.stats.evaluations_per_depth.keys()):
             evals_percentage += (str(k) + "=" + str(round((self.stats.evaluations_per_depth[k] * 100 / total_evals), 4)) + "% ")
-        print(evals_percentage)
-        if self.stats.total_seconds > 0:
-            print(f"Eval perf.: {total_evals/self.stats.total_seconds/1000:0.3f}k/s")
         avg_branching = round((self.stats.non_root/self.stats.non_leaf), 3)
-        print(f"Average branching factor: {avg_branching}")
 
         return (move, elapsed_seconds, score, total_evals, evals_depth, evals_percentage, avg_branching)
 
@@ -934,6 +946,17 @@ def main():
                 game.options.alpha_beta = False
                 alpha_option_beta = True
             else: 
+                print("Invalid input, please try again.")
+
+        options_depth = False
+        while options_depth == False:
+            input_max_depth = input(f"Enter the max depth for heuritic search or leave empty to keep default max depth at 5: ")
+            if input_max_depth.isdigit():
+                game.options.max_depth = int(input_max_depth)
+                options_depth = True
+            elif input_max_turns == "":
+                options_depth = True
+            else:
                 print("Invalid input, please try again.")    
 
         while game.options.e == None:
