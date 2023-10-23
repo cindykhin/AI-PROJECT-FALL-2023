@@ -586,8 +586,6 @@ class Game:
                 file.close()
                 self.next_turn()
 
-                
-
                 if elapsed_seconds > self.options.max_time:
                     self.stats.time_limit = True
         return move
@@ -696,8 +694,6 @@ class Game:
         elif game.options.e == "e2":
             e2 = (((healthAttackerV + 8 * nbAttackerV) + (healthAttackerT + 10 * nbAttackerT) + (healthAttackerF + 10 * nbAttackerF) + (healthAttackerP + 8 * nbAttackerP) + 9999 * healthAttackerAI * nbAttackerAI) - ((healthDefenderV * nbDefenderV) + (healthDefenderT + 8 * nbDefenderT) + (healthDefenderF+8 * nbDefenderF) + (healthDefenderP +10 * nbDefenderP) + 9999 * healthDefenderAI * nbDefenderAI) ) #/ (nbAttackerV + nbAttackerT + nbAttackerF + nbAttackerP + nbAttackerAI -( nbDefenderV + nbDefenderT + nbDefenderF + nbDefenderP + nbDefenderAI))
             return e2
-            
-      
 
     def minimax(self, game: Game, node: CoordPair, depth: int, alpha: int, beta: int, maximizing: bool) -> int:
         self.stats.evaluations_per_depth[self.options.max_depth - depth] += 1
@@ -709,6 +705,8 @@ class Game:
         
         node_clone = self.clone()
         (success, result) = node_clone.perform_move(node)
+        # next move will belong to opponent
+        node_clone.next_player = node_clone.next_player.next()
         node_list = []
         if success:
             node_list = list(node_clone.move_candidates())
