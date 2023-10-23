@@ -1,6 +1,7 @@
 t = 10.0
 m = 100
-alpha-beta = on
+alpha-beta = ON
+heuristics = e2
 player 1 = AI & player 2 = AI
 
 Initial configuration: 
@@ -12,10 +13,41 @@ D:  .   .   .  aF9 aV9
 E:  .   .  aP9 aV9 aA9 
 
 turn # 1
-Computer Attacker: move from C4 to B4
+Computer Defender: move from C4 to B4
+Elapsed time: 10.013057
+Heuristic score: 0
+Culmulative evals: 7165
+Culmulative evals per depth: 0=1 1=1 2=13 3=36 4=157 5=1830 6=5127 
+Culmulative % evals per depth: 0=0.014% 1=0.014% 2=0.1814% 3=0.5024% 4=2.1912% 5=25.5408% 6=71.5562% 
+Average branching factor: 12.408
  0   1   2   3   4  
 A: dA9 dT9 dF9  .   .  
 B: dT9 dP9  .   .  aP9 
+C: dF9  .   .   .   .  
+D:  .   .   .  aF9 aV9 
+E:  .   .  aP9 aV9 aA9 
+
+turn # 2
+Player Defender, enter your move: A2 A3
+Defender: move from A2 to A3
+ 0   1   2   3   4  
+A: dA9 dT9  .  dF9  .  
+B: dT9 dP9  .   .  aP9 
+C: dF9  .   .   .   .  
+D:  .   .   .  aF9 aV9 
+E:  .   .  aP9 aV9 aA9 
+
+turn # 3
+Computer Defender: move from B4 to A4
+Elapsed time: 10.014404
+Heuristic score: 0
+Culmulative evals: 13188
+Culmulative evals per depth: 0=2 1=2 2=25 3=78 4=294 5=3337 6=9450 
+Culmulative % evals per depth: 0=0.0152% 1=0.0152% 2=0.1896% 3=0.5914% 4=2.2293% 5=25.3033% 6=71.6561% 
+Average branching factor: 12.374
+ 0   1   2   3   4  
+A: dA9 dT9  .  dF9 aP9 
+B: dT9 dP9  .   .   .  
 C: dF9  .   .   .   .  
 D:  .   .   .  aF9 aV9 
 E:  .   .  aP9 aV9 aA9 
