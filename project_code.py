@@ -931,7 +931,7 @@ def main():
             if input_max_time.replace('.', '', 1).isdigit():
                 game.options.max_time = float(input_max_time)
                 max_time_option = True
-            elif input_max_turns == "":
+            elif input_max_time == "":
                 max_time_option = True
             else:
                 print("Invalid input, please try again.")
@@ -954,7 +954,7 @@ def main():
             if input_max_depth.isdigit():
                 game.options.max_depth = int(input_max_depth)
                 options_depth = True
-            elif input_max_turns == "":
+            elif input_max_depth == "":
                 options_depth = True
             else:
                 print("Invalid input, please try again.")    
